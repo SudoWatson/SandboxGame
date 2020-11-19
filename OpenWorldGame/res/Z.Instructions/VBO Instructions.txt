@@ -1,0 +1,6 @@
+Instructions for new VBO
+
+Update ins of respective vertexShader
+Update binds of respective Shader.java
+Update respective renderer with start and end
+Update Loader.java

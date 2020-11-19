@@ -1,0 +1,9 @@
+File > Export > .obj (wavefront)
+-Z Forward (Or direction of front of model)
+Y Up
+
+Write Normals
+Textured Models---Include UVs
+Material Models---Write Materials
+Triangulate Faces
+Objects as OBJ Objects
