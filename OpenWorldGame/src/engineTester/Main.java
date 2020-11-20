@@ -112,17 +112,18 @@ public class Main {
 			}
 			
 			player.update();
-			pumpkin.update();
-			
-			
-			pineTree.update();
+//			pumpkin.update();
+//			
+//			
+//			pineTree.update();
 			
 			
 			// Render
-			renderer.addEntity(pumpkin);
+			//renderer.addEntity(pumpkin);
 			for (List<Entity> entityList : entities) {
 				for (Entity entity : entityList) {
 					renderer.addEntity(entity);
+					entity.update();
 				}
 			}
 			
