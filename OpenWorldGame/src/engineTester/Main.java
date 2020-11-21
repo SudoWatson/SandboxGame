@@ -9,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import debug.DebugLine;
 import entities.Player;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
@@ -24,7 +25,9 @@ import terrain.TerrainGenerator;
 
 public class Main {
 	
-	private static boolean showHitboxes =  false;
+	public static boolean showHitboxes =  false;
+	public static boolean showCoordLines = false;
+	public static boolean showDebugLines = false;
 	
 	public static Loader loader;
 	
@@ -61,6 +64,7 @@ public class Main {
 		
 		
 		player = new Player(new Vector3f(0,0,0),0,45,0);
+		Camera camera = new Camera(player);
 		
 		Entity pineTree = new Entity("pineTree", new Vector3f(5,0,-5),0,0,0,1);
 		pineTree.increasePosition(0, terrain.getHeightOfTerrain(pineTree.getPosition().x, pineTree.getPosition().z), 0);
@@ -97,7 +101,7 @@ public class Main {
 		
 		
 		
-		Camera camera = new Camera(player);
+		DebugLine testLine = new DebugLine(new Vector3f(0,0,0), new Vector3f(10,10,10));
 		
 		
 		
@@ -106,9 +110,27 @@ public class Main {
 		// Game Loop
 		while (!Display.isCloseRequested()) {
 			// Logic/Update
-			if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_LBRACKET)) showHitboxes = true;
-				if (Keyboard.isKeyDown(Keyboard.KEY_RBRACKET)) showHitboxes = false;
+			if (Keyboard.isKeyDown(Keyboard.KEY_F2)) {
+				if (Keyboard.isKeyDown(Keyboard.KEY_A) ) {
+					System.out.println("F2 + ");
+					System.out.println("H:   Show Hitboxes");
+					System.out.println("C:   Show Coordinate Lines");
+					System.out.println("L:   Show Debug Lines");
+				}
+				if (Keyboard.isKeyDown(Keyboard.KEY_H)) showHitboxes = true;
+				if (Keyboard.isKeyDown(Keyboard.KEY_C)) showCoordLines = true;
+				if (Keyboard.isKeyDown(Keyboard.KEY_L)) showDebugLines = true;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+				if (Keyboard.isKeyDown(Keyboard.KEY_A) ) {
+					System.out.println("F3 + ");
+					System.out.println("H:   Hide Hitboxes");
+					System.out.println("C:   Hide Coordinate Lines");
+					System.out.println("H:   Hide Debug Lines");
+				}
+				if (Keyboard.isKeyDown(Keyboard.KEY_H)) showHitboxes = false;
+				if (Keyboard.isKeyDown(Keyboard.KEY_C)) showCoordLines = false;
+				if (Keyboard.isKeyDown(Keyboard.KEY_L)) showDebugLines = false;
 			}
 			
 			player.update();

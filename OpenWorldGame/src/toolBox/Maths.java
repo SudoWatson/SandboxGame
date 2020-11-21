@@ -4,6 +4,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import debug.DebugLine;
 import entities.entityFrameworks.Camera;
 
 public class Maths {
@@ -40,6 +41,16 @@ public class Maths {
 	}
 	
 	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector3f scale) {
+		Matrix4f transMatrix = new Matrix4f();
+		transMatrix.setIdentity();
+		Matrix4f.translate(translation, transMatrix, transMatrix);
+		Matrix4f.scale(scale, transMatrix, transMatrix);
+		return transMatrix;
+	}
+	
+	public static Matrix4f createTransformationMatrix(DebugLine debugLine) {
+		Vector3f scale = Maths.subVecs(debugLine.end, debugLine.start);
+		Vector3f translation = new Vector3f(debugLine.start);
 		Matrix4f transMatrix = new Matrix4f();
 		transMatrix.setIdentity();
 		Matrix4f.translate(translation, transMatrix, transMatrix);

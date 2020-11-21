@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import engineTester.Main;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
@@ -73,11 +74,13 @@ public class MasterRenderer {
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		
-		hitboxShader.start();
-		hitboxShader.loadFog(SKY_COLOR, FOG_DENSITY, FOG_GRADIENT);
-		hitboxShader.loadViewMatrix(camera);
-		hitboxRenderer.render(hitboxes);
-		hitboxShader.stop();
+		if (Main.showHitboxes || Main.showCoordLines || Main.showDebugLines) {
+			hitboxShader.start();
+			hitboxShader.loadFog(SKY_COLOR, FOG_DENSITY, FOG_GRADIENT);
+			hitboxShader.loadViewMatrix(camera);
+			hitboxRenderer.render(hitboxes);
+			hitboxShader.stop();
+		}
 		
 		entities.clear();
 		terrains.clear();

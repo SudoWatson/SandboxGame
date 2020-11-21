@@ -81,6 +81,7 @@ public class Entity {
 	
 	// Stops object from colliding into other objects
 	private void rebound() {
+		// Fix this method. Have a rebound method for rebounding X Y & Z. Try to rebound the smallest distance, if it still hits something, rebound the second smallest, etc.
 		float dx = 0;
 		float dy = 0;
 		float dz = 0;
@@ -355,6 +356,18 @@ public class Entity {
 		if (!Main.colidables.contains(this)) {
 			Main.colidables.add(this);
 		}
+	}
+	
+	private void reboundX() {
+		
+	}
+	
+	private void reboundY() {
+		
+	}
+	
+	private void reboundZ() {
+		
 	}
 	
 }
