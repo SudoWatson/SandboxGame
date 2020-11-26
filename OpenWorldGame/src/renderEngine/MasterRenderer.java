@@ -10,15 +10,19 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import debug.Debug;
 import engineTester.Main;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
 import entities.entityFrameworks.Light;
+import models.GUIObject;
 import models.Model;
 import renderEngine.renderers.DebugRenderer;
 import renderEngine.renderers.EntityRenderer;
+import renderEngine.renderers.GUIRenderer;
 import renderEngine.renderers.TerrainRenderer;
+import renderEngine.renderers.TextRenderer;
 import shaders.debug.DebugShader;
 import shaders.statics.StaticShader;
 import shaders.terrain.TerrainShader;
@@ -40,11 +44,13 @@ public class MasterRenderer {
 
 	private StaticShader shader = new StaticShader();
 	private TerrainShader terrainShader = new TerrainShader();
-	private DebugShader hitboxShader = new DebugShader();
+	private DebugShader debugShader = new DebugShader();
 
 	private EntityRenderer entityRenderer;
 	private TerrainRenderer terrainRenderer;
 	private DebugRenderer hitboxRenderer;
+	private GUIRenderer guiRenderer;
+	private TextRenderer textRenderer;
 	
 	private Map<Model, List<Entity>> entities = new HashMap<Model, List<Entity>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
@@ -55,7 +61,9 @@ public class MasterRenderer {
 		createProjectionMatrix();
 		entityRenderer = new EntityRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
-		hitboxRenderer = new DebugRenderer(hitboxShader, projectionMatrix);
+		hitboxRenderer = new DebugRenderer(debugShader, projectionMatrix);
+		guiRenderer = new GUIRenderer();
+		textRenderer = new TextRenderer();
 	}
 	
 	public void render(List<Light> lights, Camera camera) {
@@ -74,13 +82,16 @@ public class MasterRenderer {
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		
-		if (Main.showHitboxes || Main.showCoordLines || Main.showDebugLines) {
-			hitboxShader.start();
-			hitboxShader.loadFog(SKY_COLOR, FOG_DENSITY, FOG_GRADIENT);
-			hitboxShader.loadViewMatrix(camera);
-			hitboxRenderer.render(hitboxes);
-			hitboxShader.stop();
+		if (Debug.showHitboxes || Debug.showCoordLines || Debug.showDebugLines) {
+			debugShader.start();
+			debugShader.loadFog(SKY_COLOR, FOG_DENSITY, FOG_GRADIENT);
+			debugShader.loadViewMatrix(camera);
+			hitboxRenderer.render();
+			debugShader.stop();
 		}
+		
+		guiRenderer.render(GUIObject.GUIObjects);
+		textRenderer.render(Main.textBoxes);
 		
 		entities.clear();
 		terrains.clear();
@@ -125,7 +136,10 @@ public class MasterRenderer {
 	public void cleanUp() {
 		shader.cleanup();
 		terrainShader.cleanup();
-		hitboxShader.cleanup();
+		debugShader.cleanup();
+		
+		guiRenderer.cleanUp();
+		textRenderer.cleanUp();
 	}
 
 	private void createProjectionMatrix(){

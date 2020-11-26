@@ -5,16 +5,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import debug.DebugLine;
+import debug.Debug;
 import entities.Player;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
 import entities.entityFrameworks.Light;
+import models.GUIObject;
 import models.Model;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
@@ -22,34 +23,31 @@ import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import terrain.Terrain;
 import terrain.TerrainGenerator;
+import text.TextBox;
 
 public class Main {
-	
-	public static boolean showHitboxes =  false;
-	public static boolean showCoordLines = false;
-	public static boolean showDebugLines = false;
-	
-	public static Loader loader;
 	
 	public static List<List<Entity>> entities;
 	public static List<Terrain> terrainCells;
 	public static List<List<Hitbox>> hitboxes;
+	public static List<TextBox> textBoxes;
 	public static List<Light> lights;
 	public static List<Entity> colidables;
 	public static Player player;
 	
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		
 		// Initialize Objects etc
 		DisplayManager.createDisplay();
 		Random rnd = new Random();
 		
-		loader = new Loader();
 		MasterRenderer renderer = new MasterRenderer();
 		
 		entities = new ArrayList<List<Entity>>();
 		terrainCells = new ArrayList<Terrain>();
+		textBoxes = new ArrayList<TextBox>();
 		lights = new ArrayList<Light>();
 		hitboxes = new ArrayList<List<Hitbox>>();
 		colidables = new ArrayList<Entity>();
@@ -62,7 +60,7 @@ public class Main {
 		Terrain terrain = TerrainGenerator.generateTerrain(-(terrainSize/2), -(terrainSize/2), terrainSize);
 		terrainCells.add(terrain);
 		
-		
+		// Game Setup ---------------------------------------------------------------------------------------
 		player = new Player(new Vector3f(0,0,0),0,45,0);
 		Camera camera = new Camera(player);
 		
@@ -100,8 +98,7 @@ public class Main {
 		pumpkin.isDynamic();
 		
 		
-		
-		DebugLine testLine = new DebugLine(new Vector3f(0,0,0), new Vector3f(10,10,10));
+		GUIObject crossHair = new GUIObject(Loader.loadTexture("crosshair"), new Vector2f(), new Vector2f(0.02f,0.02f*16/9));
 		
 		
 		
@@ -109,43 +106,16 @@ public class Main {
 		
 		// Game Loop
 		while (!Display.isCloseRequested()) {
-			// Logic/Update
-			if (Keyboard.isKeyDown(Keyboard.KEY_F2)) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_A) ) {
-					System.out.println("F2 + ");
-					System.out.println("H:   Show Hitboxes");
-					System.out.println("C:   Show Coordinate Lines");
-					System.out.println("L:   Show Debug Lines");
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_H)) showHitboxes = true;
-				if (Keyboard.isKeyDown(Keyboard.KEY_C)) showCoordLines = true;
-				if (Keyboard.isKeyDown(Keyboard.KEY_L)) showDebugLines = true;
-			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_F3)) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_A) ) {
-					System.out.println("F3 + ");
-					System.out.println("H:   Hide Hitboxes");
-					System.out.println("C:   Hide Coordinate Lines");
-					System.out.println("H:   Hide Debug Lines");
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_H)) showHitboxes = false;
-				if (Keyboard.isKeyDown(Keyboard.KEY_C)) showCoordLines = false;
-				if (Keyboard.isKeyDown(Keyboard.KEY_L)) showDebugLines = false;
-			}
-			
+			// ---------------------- Logic/Update ----------------------
 			player.update();
-//			pumpkin.update();
-//			
-//			
-//			pineTree.update();
 			
-			
-			// Render
-			//renderer.addEntity(pumpkin);
+
+			Debug.update();
+			// ---------------------- Render ----------------------
 			for (List<Entity> entityList : entities) {
 				for (Entity entity : entityList) {
-					renderer.addEntity(entity);
 					entity.update();
+					renderer.addEntity(entity);
 				}
 			}
 			
@@ -153,14 +123,7 @@ public class Main {
 				renderer.addTerrain(terrn);
 			}
 			
-			if (showHitboxes) {
-				for (List<Hitbox> hitbox : hitboxes) {
-					renderer.addHitbox(hitbox);
-				}
-			}
-			
 			if (camera.getCameraStyle() != 1) renderer.addEntity(player);
-			
 			
 			
 			
@@ -168,9 +131,9 @@ public class Main {
 			DisplayManager.updateDisplay();
 		}
 		
-		// Clean Ups
+		// ----------- Clean Ups -----------
 		renderer.cleanUp();
-		loader.cleanUp();
+		Loader.cleanUp();
 		DisplayManager.closeDisplay();
 		
 	}

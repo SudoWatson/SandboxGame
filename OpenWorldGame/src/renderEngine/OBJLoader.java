@@ -10,7 +10,6 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import engineTester.Main;
 import models.RawModel;
 import toolBox.Maths;
 
@@ -184,7 +183,7 @@ public class OBJLoader {
 			}
 		}
 		
-		return Main.loader.loadToVAO(verticesArray, normalsArray, materialsArray);
+		return Loader.loadToVAO(verticesArray, normalsArray, materialsArray);
 	}
 	
 	

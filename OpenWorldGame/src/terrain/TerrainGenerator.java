@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import engineTester.Main;
 import models.RawModel;
+import renderEngine.Loader;
 import toolBox.Maths;
 import toolBox.ValueNoise2D;
 
@@ -268,7 +268,7 @@ public class TerrainGenerator {
 			indices[indexPointer++] = bottomRight;
 		}
 		
-		return Main.loader.loadToVAO(vertices, normals, colors, indices);
+		return Loader.loadToVAO(vertices, normals, colors, indices);
 	}
 	
 }

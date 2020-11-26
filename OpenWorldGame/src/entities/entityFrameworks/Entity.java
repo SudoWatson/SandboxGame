@@ -358,17 +358,17 @@ public class Entity {
 		}
 	}
 	
-	private void reboundX() {
-		
-	}
-	
-	private void reboundY() {
-		
-	}
-	
-	private void reboundZ() {
-		
-	}
+//	private void reboundX() {
+//		
+//	}
+//	
+//	private void reboundY() {
+//		
+//	}
+//	
+//	private void reboundZ() {
+//		
+//	}
 	
 }
 

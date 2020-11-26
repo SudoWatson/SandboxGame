@@ -8,11 +8,13 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import debug.Debug;
 import debug.DebugLine;
 import engineTester.Main;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
 import models.RawModel;
+import renderEngine.Loader;
 import shaders.debug.DebugShader;
 import toolBox.Maths;
 
@@ -51,11 +53,11 @@ public class DebugRenderer {
 		
 		vertexCount = hitboxIndices.length;
 
-		prism = Main.loader.loadHitbox(hitboxPositions, hitboxIndices);
-		arrow = Main.loader.loadHitbox(lookingPositions,lookingIndices);
-		coord = Main.loader.loadHitbox(linePositions,lineIndices);
-		sqare = Main.loader.loadHitbox(squarePositions,squareIndices);
-		dLine = Main.loader.loadHitbox(dLinePositions,dLineIndices);
+		prism = Loader.loadHitbox(hitboxPositions, hitboxIndices);
+		arrow = Loader.loadHitbox(lookingPositions,lookingIndices);
+		coord = Loader.loadHitbox(linePositions,lineIndices);
+		sqare = Loader.loadHitbox(squarePositions,squareIndices);
+		dLine = Loader.loadHitbox(dLinePositions,dLineIndices);
 		
 		this.shader = shader;
 		shader.start();
@@ -64,16 +66,16 @@ public class DebugRenderer {
 	}
 	
 	// Renders Hitboxes
-	public void render(List<List<Hitbox>> hitboxGroups) {
+	public void render() {
 		shader.start();
 		
 		// Renders Hitboxes
-		if (Main.showHitboxes) {
+		if (Debug.showHitboxes) {
 			shader.loadColor(HITBOX_COLOR);
 			GL30.glBindVertexArray(prism.getVaoID());
 			GL20.glEnableVertexAttribArray(0);
 			
-			for (List<Hitbox> hitboxes : hitboxGroups) {
+			for (List<Hitbox> hitboxes : Main.hitboxes) {
 				for (Hitbox hitbox : hitboxes) {
 					prepareHB(hitbox);
 					GL11.glDrawElements(GL11.GL_LINES, vertexCount, GL11.GL_UNSIGNED_INT, 0);  // Draws hitbox
@@ -88,7 +90,7 @@ public class DebugRenderer {
 			GL30.glBindVertexArray(arrow.getVaoID());
 			GL20.glEnableVertexAttribArray(0);
 			
-			for (List<Hitbox> hitboxes : hitboxGroups) {
+			for (List<Hitbox> hitboxes : Main.hitboxes) {
 				Hitbox workingBox = null;
 				float volume = 0;
 				for (Hitbox hitbox : hitboxes) {
@@ -108,7 +110,7 @@ public class DebugRenderer {
 		
 
 		// Renders Coordinate Lines
-		if (Main.showCoordLines) {
+		if (Debug.showCoordLines) {
 			// Renders Verticle Coordinate Lines
 			shader.loadColor(COORD_COLOR);
 			GL30.glBindVertexArray(coord.getVaoID());
@@ -179,7 +181,7 @@ public class DebugRenderer {
 		
 
 		// Renders debug arrows
-		if (Main.showDebugLines) {
+		if (Debug.showDebugLines) {
 			shader.loadColor(DEBUG_LINE_COLOR);
 			GL30.glBindVertexArray(dLine.getVaoID());
 			GL20.glEnableVertexAttribArray(0);

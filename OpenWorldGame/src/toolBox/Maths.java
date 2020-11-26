@@ -28,6 +28,21 @@ public class Maths {
 		return transMatrix;
 	}
 	
+	public static Matrix4f createTransformationmatrix(Vector2f translation, Vector2f scale) {
+		Matrix4f transMatrix = new Matrix4f();
+		transMatrix.setIdentity();
+		Matrix4f.translate(translation, transMatrix, transMatrix);
+		Matrix4f.scale(new Vector3f(scale.x, scale.y, 1f), transMatrix, transMatrix);
+		return transMatrix;
+	}
+	
+	public static Matrix4f createTransformationmatrix(Vector2f translation) {
+		Matrix4f transMatrix = new Matrix4f();
+		transMatrix.setIdentity();
+		Matrix4f.translate(translation, transMatrix, transMatrix);
+		return transMatrix;
+	}
+	
 	public static Matrix4f createRayTransformationMatrix(Vector3f translation, Vector3f rotation, Vector3f scale, float yOffset) {
 		translation.y+=yOffset;
 		Matrix4f transMatrix = new Matrix4f();

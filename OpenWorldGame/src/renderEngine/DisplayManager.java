@@ -11,8 +11,9 @@ import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {  // DisplayManager because it manages a display. It is not a display itself
 	
+	private static final float ASPEC_RATIO = 16f/9f;
 	private static final int HEIGHT = 720;
-	private static final int WIDTH = HEIGHT*16/9;
+	private static final int WIDTH = (int) (HEIGHT*ASPEC_RATIO);
 	private static final int FPS_CAP = 120;
 	
 	private static long lastFrameTime;
