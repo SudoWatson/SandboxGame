@@ -1,6 +1,21 @@
 # SandboxGame
 Just a sandbox game for me to implement and learn how game design works with Java and LWJGL(OpenGL)
 
+Week4:
+- Added and implemented GUI renderer
+- Added and implemented GUI shaders
+- Added GUI objects
+- Added crosshair
+- Added text boxes
+- Added font loading
+- Added text rendering
+- Text of a textbox is now changable
+- Text works at different font sizes
+- Added a view
+- Added an FPS counter
+- Added a debug manager class to handle all debug modes
+- Changed loader to be static
+
 Week3:
 - Implemented sub-debug mode system
 - Added sub-debug modes; Hitbox, Coords, Debug Lines
