@@ -1,6 +1,16 @@
 # SandboxGame
 Just a sandbox game for me to implement and learn how game design works with Java and LWJGL(OpenGL)
 
+Week5:
+- Added debug points
+- Added a ray-cast from the screen crosshair
+- Detected objects along the ray
+- Called method on intersecting objects once for every click
+- Initiated only the nearest object's method along the ray
+- Added a method for entities when they are clicked on
+- Added a method for entities when the cursor hovers over them
+- Put pumpkin into its own class, can now be called with 1 line of code instead of 7
+
 Week4:
 - Added and implemented GUI renderer
 - Added and implemented GUI shaders
