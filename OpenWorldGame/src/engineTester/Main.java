@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import debug.Debug;
 import entities.Player;
+import entities.Pumpkin;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
@@ -34,6 +35,7 @@ public class Main {
 	public static List<Light> lights;
 	public static List<Entity> colidables;
 	public static Player player;
+	public static MasterRenderer renderer;
 	
 	
 	@SuppressWarnings("unused")
@@ -43,14 +45,14 @@ public class Main {
 		DisplayManager.createDisplay();
 		Random rnd = new Random();
 		
-		MasterRenderer renderer = new MasterRenderer();
+		renderer = new MasterRenderer();
 		
 		entities = new ArrayList<List<Entity>>();
-		terrainCells = new ArrayList<Terrain>();
+		terrainCells = new ArrayList<Terrain>();  // List in World class
 		textBoxes = new ArrayList<TextBox>();
-		lights = new ArrayList<Light>();
-		hitboxes = new ArrayList<List<Hitbox>>();
-		colidables = new ArrayList<Entity>();
+		lights = new ArrayList<Light>();  // List will be in Light class
+		hitboxes = new ArrayList<List<Hitbox>>();  // List will be in Hitbox class
+		colidables = new ArrayList<Entity>();  // List will be in Entity class
 
 
 		Light sun = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
@@ -81,6 +83,7 @@ public class Main {
 			float z = rnd.nextFloat() * 1000 - 500;
 			Entity tree = new Entity(treeModel, new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0,1);
 			tree.addHitbox("trunk", new Vector3f(0,0,0), new Vector3f(1,3,1));
+			tree.addHitbox("main", new Vector3f(0,0,0), new Vector3f(1,3,1));
 			tree.addHitbox("leaves", new Vector3f(0,3,0), new Vector3f(2.5f,1,2.5f));
 			hitboxes.add(tree.getHitboxes());
 			tree.setCollision(true, "trunk");
@@ -88,22 +91,14 @@ public class Main {
 			trees.add(tree);
 		}
 		
-		Entity pumpkin = new Entity("pumpkinLow", new Vector3f(0,0,10), new Vector3f(0,0,0));
-		//pumpkin.increasePosition(0, terrain.getHeightOfTerrain(pumpkin.getPosition().x, pumpkin.getPosition().z), 0);
-		entities.add(new ArrayList<Entity>(Arrays.asList(pumpkin)));
-		pumpkin.usesGravity();
-		pumpkin.addHitbox("main", new Vector3f(), new Vector3f(2,2,2));
-		hitboxes.add(pumpkin.getHitboxes());
-		pumpkin.setCollision(true, "main");
-		pumpkin.isDynamic();
 		
 		
 		GUIObject crossHair = new GUIObject(Loader.loadTexture("crosshair"), new Vector2f(), new Vector2f(0.02f,0.02f*16/9));
 		
+		Pumpkin pumpkin = new Pumpkin(new Vector3f());
 		
 		
-		
-		
+		entities.add(Pumpkin.pumpkins);
 		// Game Loop
 		while (!Display.isCloseRequested()) {
 			// ---------------------- Logic/Update ----------------------
@@ -113,9 +108,10 @@ public class Main {
 			Debug.update();
 			// ---------------------- Render ----------------------
 			for (List<Entity> entityList : entities) {
-				for (Entity entity : entityList) {
+				for (Entity entity : entityList) {  // Updates and renders all entities so it loops only once
 					entity.update();
 					renderer.addEntity(entity);
+					camera.getRay().castTo(entity);
 				}
 			}
 			

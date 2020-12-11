@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import debug.Debug;
 import debug.DebugLine;
+import debug.DebugPoint;
 import engineTester.Main;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
@@ -26,8 +27,9 @@ public class DebugRenderer {
 	private final Vector3f CORNER_COLOR = new Vector3f(0,0,1);
 	private final Vector3f SQUARE_COLOR = new Vector3f(1,0,0);
 	private final Vector3f DEBUG_LINE_COLOR = new Vector3f(1,0,0);
-	
-	private final RawModel prism;
+
+	private final RawModel hitBoxModel;
+	private final RawModel pointModel;
 	private final RawModel arrow;
 	private final RawModel coord;
 	private final RawModel sqare;
@@ -39,9 +41,10 @@ public class DebugRenderer {
 	
 	private DebugShader shader;
 	// Heads Up Coord lines dont do well with negative position because negative numbers different
-	public DebugRenderer(DebugShader shader, Matrix4f projectionMatrix) {
-		float[] hitboxPositions = {1, -1, -1, 1, -1, 1, -1, -1, 1, -1, -1, -1, 1, 1, -1, 1, 1, 1, -1, 1, 1, -1, 1, -1};
+	public DebugRenderer(DebugShader shader, Matrix4f projectionMatrix) {	//this		this
+		float[] cubePositions = {1, -1, -1, 1, -1, 1, -1, -1, 1, -1, -1, -1, 1, 1, -1, 1, 1, 1, -1, 1, 1, -1, 1, -1};
 		int[] hitboxIndices = {0,1,1,2,2,3,3,0,4,5,5,6,6,7,7,4,0,4,1,5,2,6,3,7};
+		int[] pointIndices = {0,1,2,0,2,3,4,6,5,4,7,6,0,4,5,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0}; //3740
 		float[] lookingPositions = {0,0,0,1.25f,0,0};
 		int[] lookingIndices = {0,1};
 		float[] linePositions = {0,-1,0,0,1,0};
@@ -53,7 +56,8 @@ public class DebugRenderer {
 		
 		vertexCount = hitboxIndices.length;
 
-		prism = Loader.loadHitbox(hitboxPositions, hitboxIndices);
+		hitBoxModel = Loader.loadHitbox(cubePositions, hitboxIndices);
+		pointModel = Loader.loadHitbox(cubePositions, pointIndices);
 		arrow = Loader.loadHitbox(lookingPositions,lookingIndices);
 		coord = Loader.loadHitbox(linePositions,lineIndices);
 		sqare = Loader.loadHitbox(squarePositions,squareIndices);
@@ -72,12 +76,12 @@ public class DebugRenderer {
 		// Renders Hitboxes
 		if (Debug.showHitboxes) {
 			shader.loadColor(HITBOX_COLOR);
-			GL30.glBindVertexArray(prism.getVaoID());
+			GL30.glBindVertexArray(hitBoxModel.getVaoID());
 			GL20.glEnableVertexAttribArray(0);
 			
 			for (List<Hitbox> hitboxes : Main.hitboxes) {
 				for (Hitbox hitbox : hitboxes) {
-					prepareHB(hitbox);
+					prepareCube(hitbox.getPosition(), hitbox.getScale());
 					GL11.glDrawElements(GL11.GL_LINES, vertexCount, GL11.GL_UNSIGNED_INT, 0);  // Draws hitbox
 				}
 			}
@@ -193,14 +197,28 @@ public class DebugRenderer {
 			GL30.glBindVertexArray(0);
 		}
 		
+
+		// Renders debug points
+		if (Debug.showDebugLines) {
+			GL30.glBindVertexArray(pointModel.getVaoID());
+			GL20.glEnableVertexAttribArray(0);
+			for (DebugPoint point : DebugPoint.DebugPoints) {
+				shader.loadColor(point.color);
+				prepareCube(point.pos, new Vector3f(0.1f,0.1f,0.1f));
+				GL11.glDrawElements(GL11.GL_TRIANGLES, pointModel.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+			}
+			GL20.glDisableVertexAttribArray(0);
+			GL30.glBindVertexArray(0);
+		}
+		
 		
 		
 		shader.stop();
 	}
 	
 	// Prepares a Hitbox to be rendered
-	private void prepareHB(Hitbox hitbox) {
-		Matrix4f transformationMatrix = Maths.createTransformationMatrix(hitbox.getPosition(),hitbox.getScale());
+	private void prepareCube(Vector3f pos, Vector3f scale) {
+		Matrix4f transformationMatrix = Maths.createTransformationMatrix(pos, scale);
 		shader.loadTransformationMatrix(transformationMatrix);
 	}
 	

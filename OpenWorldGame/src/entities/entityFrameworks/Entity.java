@@ -49,11 +49,13 @@ public class Entity {
 	// Takes Filename For Mesh and Materials File - No Texture Image
 	public Entity(String model, Vector3f position, Vector3f rotation) {
 		this(new Model(OBJLoader.loadObjModel(model)), position, rotation.x, rotation.y, rotation.z, 1);
+		this.modelName = model;
 	}
 	
 	// Takes Filename For Mesh and Materials File - No Texture Image
 	public Entity(String model, Vector3f position, Vector3f rotation, float scale) {
 		this(new Model(OBJLoader.loadObjModel(model)), position, rotation.x, rotation.y, rotation.z, scale);
+		this.modelName = model;
 	}
 	
 	// Takes Filename For Mesh and Materials File
@@ -157,11 +159,8 @@ public class Entity {
 	
 	private void fall() {
 		ySpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
-
-		
 		dy = ySpeed * ( DisplayManager.getFrameTimeSeconds());
 		
-
 		if (this.getPosition().y < Main.terrainCells.get(0).getHeightOfTerrain(this.getPosition().x, this.getPosition().z)) {
 			ySpeed = 0;
 			inAir = false;
@@ -202,10 +201,12 @@ public class Entity {
 		this.increasePosition(dx, dy, dz);
 	}
 	
+	public void rayHover() {}
+
+	public void rayClick(int button, boolean state) {}
+	
 	public void rotate(float dx, float dy, float dz) {
-		this.rotX += dx;
-		this.rotY += dy;
-		this.rotZ += dz;
+		this.setRotation(new Vector3f(this.rotX + dx, this.rotY + dy, this.rotZ + dz));
 	}
 	
 	public Model getModel() {return model;}
@@ -216,41 +217,53 @@ public class Entity {
 
 	public void setPosition(Vector3f position) {
 		this.position = position;
-		this.dirArrowHeight = this.position.y/4*3;
 	}
 	
 	public void increasePosition(float dx, float dy, float dz) {
 		this.position = Maths.addVecs(this.position, new Vector3f(dx,dy,dz));
-		this.dirArrowHeight += dy;
 	}
 
 	public void increaseHeight(float dHeight) {this.increasePosition(0, dHeight, 0);}
 	
 	public void setHeight(float height) {
-		this.position.y = height;
+		this.position.y = height;// Doesn't fully work
 	}
 	
 	public Vector3f getRotation() {return new Vector3f(this.rotX, this.rotY, this.rotZ);}
 	
 	public void setRotation(Vector3f rotation) {
-		this.rotX = rotation.x;
-		this.rotY = rotation.y;
-		this.rotZ = rotation.z;
+		this.setRotX(rotation.x);
+		this.setRotY(rotation.y);
+		this.setRotZ(rotation.z);
 	}
 
 	public float getRotX() {return rotX;}
 
-	public void setRotX(float rotX) {this.rotX = rotX;}
+	public void setRotX(float rotX) {
+		this.rotX = rotX;
+		if (this.rotX > 360) this.rotX -= 360;
+		else if (this.rotX < 0) this.rotX += 360;
+	}
 
 	public float getRotY() {return rotY;}
 
-	public void setRotY(float rotY) {this.rotY = rotY;}
+	public void setRotY(float rotY) {
+		this.rotY = rotY;
+		if (this.rotY > 360) this.rotY -= 360;
+		else if (this.rotY < 0) this.rotY += 360;
+	}
 
 	public float getRotZ() {return rotZ;}
 
-	public void setRotZ(float rotZ) {this.rotZ = rotZ;}
+	public void setRotZ(float rotZ) {
+		this.rotZ = rotZ;
+		if (this.rotZ > 360) this.rotZ -= 360;
+		else if (this.rotZ < 0) this.rotZ += 360;
+	}
+	
+	public String getName() {return this.modelName;}
 
-	public float getScale() {return scale;}
+	public float getScale() {return this.scale;}
 
 	public void setScale(float scale) {this.scale = scale;}
 	

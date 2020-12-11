@@ -4,7 +4,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import engineTester.Main;
 import entities.Player;
+import toolBox.Ray;
 
 public class Camera {
 	
@@ -17,20 +19,32 @@ public class Camera {
 	private float pitch = 0;
 	private float yaw = 0;
 	private float roll = 0;
+	
 	private Player player;
+	private Ray ray;
 	
 	
 	public Camera(Player player) {
 		this.player = player;
 		this.player.setCamera(this);
+		this.ray = new Ray(this, Main.renderer.getProjectionMatrix());
 	}
 	
-	public void move() {  // Runs every frame
+	public void update() {  // Runs every frame
 		checkInputs();
 		calculateZoom();
 		calculateAngles();
 		calculateCameraPosition(horizontalDistance(), verticalDistance());
 		this.yaw = 180-(player.getRotY() + angleAroundPlayer);
+		
+		if (this.yaw > 360) {this.yaw -= 360;}
+		else if (this.yaw < 0) {this.yaw += 360;}
+		
+		ray.update();
+		
+		
+		
+		//System.out.println(ray.getDir());
 	}
 	
 	private void checkInputs() {
@@ -40,6 +54,8 @@ public class Camera {
 			this.pitch = 0;
 		}
 	}
+	
+	public Ray getRay() {return this.ray;}
 	
 	public Vector3f getPosition() {
 		return position;

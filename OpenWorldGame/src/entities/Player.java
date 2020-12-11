@@ -39,7 +39,7 @@ public class Player extends Entity {
 	
 	public void update() {
 		super.update();
-		this.playerCamera.move();
+		this.playerCamera.update();
 	}
 	
 	protected void updateLogic() {

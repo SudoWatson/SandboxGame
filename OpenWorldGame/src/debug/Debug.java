@@ -21,7 +21,7 @@ public class Debug {
 	private static TextBox fpsTextBox = new TextBox("", Fonts.monospaced, new Vector2f(0,2), new Vector2f(0.5f, 1));
 	private static TextBox debugInfo = new TextBox(
 			"F2: Show     F3: Hide\n" + 
-			"F#+A:   Debug List\n" +  
+			"F#+I:   Debug List\n" +  
 			"F#+H:   Hitboxes\n" + 
 			"F#+C:   Coordinate Lines\n" + 
 			"F#+L:   Debug Lines\n" + 
@@ -34,7 +34,7 @@ public class Debug {
 	public static void update() {
 		// ********** Update Keystrokes ********** \\
 		if (Keyboard.isKeyDown(Keyboard.KEY_F2)) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_A) ) debugInfo.show();
+			if (Keyboard.isKeyDown(Keyboard.KEY_I) ) debugInfo.show();
 			if (Keyboard.isKeyDown(Keyboard.KEY_H)) showHitboxes = true;
 			if (Keyboard.isKeyDown(Keyboard.KEY_C)) showCoordLines = true;
 			if (Keyboard.isKeyDown(Keyboard.KEY_L)) showDebugLines = true;
@@ -44,7 +44,7 @@ public class Debug {
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_F3)) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_A) ) debugInfo.hide();
+			if (Keyboard.isKeyDown(Keyboard.KEY_I) ) debugInfo.hide();
 			if (Keyboard.isKeyDown(Keyboard.KEY_H)) showHitboxes = false;
 			if (Keyboard.isKeyDown(Keyboard.KEY_C)) showCoordLines = false;
 			if (Keyboard.isKeyDown(Keyboard.KEY_L)) showDebugLines = false;

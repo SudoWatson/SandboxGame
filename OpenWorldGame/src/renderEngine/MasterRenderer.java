@@ -66,6 +66,8 @@ public class MasterRenderer {
 		textRenderer = new TextRenderer();
 	}
 	
+	public Matrix4f getProjectionMatrix() {return this.projectionMatrix;}
+	
 	public void render(List<Light> lights, Camera camera) {
 		prepare();
 		shader.start();

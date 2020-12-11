@@ -136,4 +136,10 @@ public class Maths {
 		return new Vector3f(blend(vector1.x,vector2.x,blendFactor),blend(vector1.y,vector2.y,blendFactor),blend(vector1.z,vector2.z,blendFactor));
 	}
 	
+	public static float getDistance(Vector3f pos1, Vector3f pos2) {
+		float distance = (float) Math.sqrt(Math.pow(pos2.x-pos1.x, 2) + Math.pow(pos2.y-pos1.y, 2));
+		distance = (float) Math.sqrt(Math.pow(distance, 2) + Math.pow(pos2.z-pos1.z, 2));
+		return distance;
+	}
+	
 }

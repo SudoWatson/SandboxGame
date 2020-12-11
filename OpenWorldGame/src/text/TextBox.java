@@ -18,11 +18,6 @@ public class TextBox {
 	private Font font;
 	
 	
-	/* ------------------- Things that need to happen -------------------
-	 * Allow for text to change
-	 * When text is updated, update the mesh by deleting the old one and calculating a new one
-	 */
-	
 	public TextBox(String text, Font font, Vector2f position, Vector2f scale) {
 		this.POSITION = position;
 		this.SCALE = scale;
