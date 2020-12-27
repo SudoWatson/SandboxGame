@@ -14,15 +14,23 @@ import models.RawModel;
 import toolBox.Maths;
 
 public class OBJLoader {
+
+	private static List<String> modelNames = new ArrayList<String>();
+	private static List<RawModel> rawModels = new ArrayList<RawModel>();
 	
 	public static RawModel loadObjModel(String fileName) {
+		if (!modelNames.contains(fileName)) createObjModel(fileName);
+		return rawModels.get(modelNames.indexOf(fileName));
+	}
+	
+	private static void createObjModel(String fileName) {
 		String matFileName = "missingMaterial.mtl";
 		boolean material = false;
 		
 		FileReader objFileReader = null;
 		try {
 			objFileReader = new FileReader(new File("res/models/"+fileName+".obj"));
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) { 
 			System.err.println("Couldn't load file res/models/" + fileName + ".obj");
 			try {
 				objFileReader = new FileReader(new File("res/models/missingModel.obj"));
@@ -100,18 +108,18 @@ public class OBJLoader {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+				matReader.close();
 				
 			} else materialColors.add(new Vector4f (0,0,0,0));
 
 			Vector4f mat = new Vector4f(1,1,1,1);
 			while (line != null) {
-				if (!line.startsWith("f ") && !line.startsWith("usemtl")) {
+				if (!line.startsWith("f ") && !line.startsWith("usemtl")) {  // Line we don't care about
 					line = objReader.readLine();
 					continue;
 				}
 				
-				if (line.startsWith("usemtl ")) {
+				if (line.startsWith("usemtl ")) {  // Line telling the material
 					String[] currentLine = line.split(" ");
 					int index = materialNames.indexOf(currentLine[1]);
 					if (index < 0) {
@@ -122,6 +130,8 @@ public class OBJLoader {
 					continue;
 				}
 				
+				
+				// f Line
 				materials.add(mat);
 				
 				String[] currentLine = line.split(" ");
@@ -155,10 +165,11 @@ public class OBJLoader {
 			verticesArray[vertexPointer++] = vertices.get(index).y;
 			verticesArray[vertexPointer++] = vertices.get(index).z;
 			
-			if (i%3 == 2) {  // Triangle vertices have been calculated; Calculate the normal for the triangle
+			if (i%3 == 2) {  // 3 Triangle vertices have been calculated; Calculate the normal for the triangle
 				Vector3f vertex0 = vertices.get(indices.get(i-2));
 				Vector3f vertex1 = vertices.get(indices.get(i-1));
 				Vector3f vertex2 = vertices.get(indices.get(i-0));
+				
 				Vector3f normal = Maths.calcNormal(vertex0, vertex1, vertex2);
 				
 				int normalPointer = vertexPointer-9;
@@ -167,10 +178,7 @@ public class OBJLoader {
 					normalsArray[normalPointer++] = normal.y;
 					normalsArray[normalPointer++] = normal.z;
 				}
-				
-				
 			}
-			
 		}
 		int materialPointer = 0;
 		for (int i = 0; i < materials.size(); i++) {
@@ -183,7 +191,8 @@ public class OBJLoader {
 			}
 		}
 		
-		return Loader.loadToVAO(verticesArray, normalsArray, materialsArray);
+		modelNames.add(fileName);
+		rawModels.add(Loader.loadToVAO(verticesArray, normalsArray, materialsArray));
 	}
 	
 	

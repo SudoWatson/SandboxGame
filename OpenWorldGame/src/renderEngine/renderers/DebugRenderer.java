@@ -102,6 +102,8 @@ public class DebugRenderer {
 					if (thisVolume > volume) {
 						volume = thisVolume;
 						workingBox = hitbox;
+					} else if (workingBox == null) {
+						workingBox = hitbox;
 					}
 				}
 				prepareArrow(workingBox, volume);

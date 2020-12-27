@@ -78,24 +78,33 @@ public class Main {
 		List<Entity> trees = new ArrayList<Entity>();
 		entities.add(trees);
 		Model treeModel = new Model(OBJLoader.loadObjModel("loliPopTree"));
-		for (int i = 0; i < 1000; i ++) {
-			float x = rnd.nextFloat() * 1000 - 500;
-			float z = rnd.nextFloat() * 1000 - 500;
+		for (int i = 0; i < 100; i ++) {
+			float x = rnd.nextFloat() * terrainSize - terrainSize/2;
+			float z = rnd.nextFloat() * terrainSize - terrainSize/2;
 			Entity tree = new Entity(treeModel, new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0,1);
-			tree.addHitbox("trunk", new Vector3f(0,0,0), new Vector3f(1,3,1));
 			tree.addHitbox("main", new Vector3f(0,0,0), new Vector3f(1,3,1));
 			tree.addHitbox("leaves", new Vector3f(0,3,0), new Vector3f(2.5f,1,2.5f));
 			hitboxes.add(tree.getHitboxes());
-			tree.setCollision(true, "trunk");
+			tree.setCollision(true, "main");
 			tree.setCollision(true, "leaves");
 			trees.add(tree);
+		}
+
+		List<Entity> grasses = new ArrayList<Entity>();
+		entities.add(grasses);
+		Model grassModel = new Model(OBJLoader.loadObjModel("grass"));
+		for (int i = 0; i < 100; i ++) {
+			float x = rnd.nextFloat() * terrainSize - terrainSize/2;
+			float z = rnd.nextFloat() * terrainSize - terrainSize/2;
+			Entity grass = new Entity(grassModel, new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0,1.5f);
+			trees.add(grass);
 		}
 		
 		
 		
 		GUIObject crossHair = new GUIObject(Loader.loadTexture("crosshair"), new Vector2f(), new Vector2f(0.02f,0.02f*16/9));
 		
-		Pumpkin pumpkin = new Pumpkin(new Vector3f());
+		Pumpkin pumpkin = new Pumpkin(new Vector3f(10,0,0));
 		
 		
 		entities.add(Pumpkin.pumpkins);

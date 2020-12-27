@@ -13,7 +13,7 @@ import renderEngine.OBJLoader;
 
 public class Player extends Entity {
 
-	private static final String MODEL_FILE = "blob";
+	private static final String MODEL_FILE = "player";
 	private static final float RUN_SPEED = 12f;
 	private static final float STRAFE_SPEED = RUN_SPEED - 2f;
 	private static final float JUMP_FORCE = 15;

@@ -9,16 +9,6 @@ import engineTester.Main;
 import entities.entityFrameworks.Entity;
 
 public class Pumpkin extends Entity {
-	/*
-	 * 
-		Entity pumpkin = new Entity("pumpkinLow", new Vector3f(0,0,10), new Vector3f(0,0,0));
-		entities.add(new ArrayList<Entity>(Arrays.asList(pumpkin)));
-		pumpkin.usesGravity();
-		pumpkin.addHitbox("main", new Vector3f(), new Vector3f(2,2,2));
-		hitboxes.add(pumpkin.getHitboxes());
-		pumpkin.setCollision(true, "main");
-		pumpkin.isDynamic();
-	 */
 	
 	public static List<Entity> pumpkins = new ArrayList<Entity>();
 	

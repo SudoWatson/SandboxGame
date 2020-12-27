@@ -53,6 +53,7 @@ public class Ray {
 		// Line AABB collision thanks to SketchpunkLabs @ 'youtube.com/watch?v=4h-jlOBsndU' !
 		if (Maths.getDistance(this.pos, entity.getPosition()) > this.maxLength) return false;
 		
+		if (!entity.hasHitbox("main")) return false;
 		Hitbox box = entity.getHitbox("main");
 		float temp;
 		
@@ -94,7 +95,7 @@ public class Ray {
 		if (xMin > yMax || yMin > xMax) return false;
 		if (min > zMax || zMin > max) return false;
 		
-		// Sets proper min/max if necessary
+		// Sets proper min/max if necessary, these are the 2 collision projections (no idea how useful this is)
 		if (zMin > min) min = zMin;
 		if (zMax < max) max = zMax;
 		
@@ -110,9 +111,7 @@ public class Ray {
 		if (intersects != null) {
 			if (Mouse.next()) {
 				if (Mouse.getEventButton() > -1) {
-					//if (Mouse.isButtonDown(Mouse.getEventButton())) {
-						intersects.rayClick(Mouse.getEventButton(), Mouse.getEventButtonState());
-					//}
+					intersects.rayClick(Mouse.getEventButton(), Mouse.getEventButtonState());
 				}
 			}
 			else intersects.rayHover();

@@ -293,6 +293,12 @@ public class Entity {
 		return this.hitboxes.get(hbID);
 	}
 	
+	public boolean hasHitbox(String name) {
+		int hbID = this.hbNames.indexOf(name);
+		if (hbID < 0) return false;
+		return true;
+	}
+	
 	public List<Hitbox> getHitboxes() {
 		return this.hitboxes;
 	}

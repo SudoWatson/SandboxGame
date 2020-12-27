@@ -12,13 +12,14 @@ public class Camera {
 	
 	private final float MAX_ZOOM = 40;
 	
-	private float distanceFromPlayer = 10;
+	private float distanceFromPlayer = 0;
 	private float angleAroundPlayer = 0;
 	
 	private Vector3f position = new Vector3f(0,0,0);
 	private float pitch = 0;
 	private float yaw = 0;
 	private float roll = 0;
+	private float headHeight = 2.36995f;
 	
 	private Player player;
 	private Ray ray;
@@ -30,7 +31,7 @@ public class Camera {
 		this.ray = new Ray(this, Main.renderer.getProjectionMatrix());
 	}
 	
-	public void update() {  // Runs every frame
+	public void update() {
 		checkInputs();
 		calculateZoom();
 		calculateAngles();
@@ -41,10 +42,6 @@ public class Camera {
 		else if (this.yaw < 0) {this.yaw += 360;}
 		
 		ray.update();
-		
-		
-		
-		//System.out.println(ray.getDir());
 	}
 	
 	private void checkInputs() {
@@ -108,7 +105,7 @@ public class Camera {
 		float theta = player.getRotY();// + angleAroundPlayer;
 		float xOff = (float) (horizDist * Math.sin(Math.toRadians(theta)));
 		float zOff = (float) (horizDist * Math.cos(Math.toRadians(theta)));
-		float yOff = 2.8f;
+		float yOff = headHeight;
 		position.x = player.getPosition().x - xOff;
 		position.z = player.getPosition().z - zOff;
 		position.y = player.getPosition().y + vertDist + yOff;
