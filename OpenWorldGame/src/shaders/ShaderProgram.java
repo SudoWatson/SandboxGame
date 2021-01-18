@@ -66,14 +66,13 @@ public abstract class ShaderProgram {
 		GL20.glBindAttribLocation(programID, attribute, variableName);
 	}
 	
-	// Methods for loading values into variables of shaders
-	protected void loadFloat(int location, float value) {
-		GL20.glUniform1f(location,  value);
-	}
-	
-	// Methods for loading values into variables of shaders
+	// Methods for loading values into variables of shaders  // Fix these to be easier like ThinMatrix did
 	protected void loadInt(int location, int value) {
 		GL20.glUniform1i(location,  value);
+	}
+	
+	protected void loadFloat(int location, float value) {
+		GL20.glUniform1f(location,  value);
 	}
 	
 	protected void loadVector(int location, Vector3f vector ) {
@@ -114,7 +113,7 @@ public abstract class ShaderProgram {
 		int shaderID = GL20.glCreateShader(type);
 		GL20.glShaderSource(shaderID, shaderSource);
 		GL20.glCompileShader(shaderID);
-		if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {  // try glGetShader
+		if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {  // Failed to compile shader
 			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
 			System.err.println("Could not compile " + file);
 			System.exit(-1);

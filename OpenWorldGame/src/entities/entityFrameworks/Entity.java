@@ -9,6 +9,7 @@ import engineTester.Main;
 import models.Model;
 import renderEngine.DisplayManager;
 import renderEngine.OBJLoader;
+import renderEngine.XMLLoader;
 import toolBox.Maths;
 
 public class Entity {
@@ -51,6 +52,11 @@ public class Entity {
 		this(new Model(OBJLoader.loadObjModel(model)), position, rotation.x, rotation.y, rotation.z, 1);
 		this.modelName = model;
 	}
+	
+//	public Entity(String model, Vector3f position, Vector3f rotation, boolean XML) {
+//		this(new Model(XMLLoader.loadXMLObject(model)), position, rotation.x, rotation.y, rotation.z, 1);
+//		this.modelName = model;
+//	}
 	
 	// Takes Filename For Mesh and Materials File - No Texture Image
 	public Entity(String model, Vector3f position, Vector3f rotation, float scale) {

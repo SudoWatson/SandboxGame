@@ -12,17 +12,21 @@ import org.lwjgl.util.vector.Vector3f;
 
 import debug.Debug;
 import engineTester.Main;
+import entities.entityFrameworks.AnimatedEntity;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
 import entities.entityFrameworks.Light;
+import models.AnimatedModel;
 import models.GUIObject;
 import models.Model;
+import renderEngine.renderers.AnimatedRenderer;
 import renderEngine.renderers.DebugRenderer;
 import renderEngine.renderers.EntityRenderer;
 import renderEngine.renderers.GUIRenderer;
 import renderEngine.renderers.TerrainRenderer;
 import renderEngine.renderers.TextRenderer;
+import shaders.animation.AnimationShader;
 import shaders.debug.DebugShader;
 import shaders.statics.StaticShader;
 import shaders.terrain.TerrainShader;
@@ -43,16 +47,19 @@ public class MasterRenderer {
 	private Matrix4f projectionMatrix;
 
 	private StaticShader shader = new StaticShader();
+	private AnimationShader animationShader = new AnimationShader();
 	private TerrainShader terrainShader = new TerrainShader();
 	private DebugShader debugShader = new DebugShader();
 
 	private EntityRenderer entityRenderer;
+	private AnimatedRenderer animationRenderer;
 	private TerrainRenderer terrainRenderer;
 	private DebugRenderer hitboxRenderer;
 	private GUIRenderer guiRenderer;
 	private TextRenderer textRenderer;
-	
+
 	private Map<Model, List<Entity>> entities = new HashMap<Model, List<Entity>>();
+	private Map<AnimatedModel, List<AnimatedEntity>> animatedEntities = new HashMap<AnimatedModel, List<AnimatedEntity>>();  // TEMPORARY
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	private List<List<Hitbox>> hitboxes = new ArrayList<List<Hitbox>>();
 	
@@ -60,6 +67,7 @@ public class MasterRenderer {
 		enableCulling();
 		createProjectionMatrix();
 		entityRenderer = new EntityRenderer(shader, projectionMatrix);
+		animationRenderer = new AnimatedRenderer(animationShader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 		hitboxRenderer = new DebugRenderer(debugShader, projectionMatrix);
 		guiRenderer = new GUIRenderer();
@@ -76,6 +84,13 @@ public class MasterRenderer {
 		shader.loadViewMatrix(camera);;
 		entityRenderer.render(entities);
 		shader.stop();
+
+		animationShader.start();
+		animationShader.loadFog(SKY_COLOR, FOG_DENSITY, FOG_GRADIENT);
+		animationShader.loadLights(lights);
+		animationShader.loadViewMatrix(camera);;
+		animationRenderer.render(animatedEntities);
+		animationShader.stop();
 		
 		terrainShader.start();
 		terrainShader.loadFog(SKY_COLOR, FOG_DENSITY, FOG_GRADIENT);
@@ -94,8 +109,9 @@ public class MasterRenderer {
 		
 		guiRenderer.render(GUIObject.GUIObjects);
 		textRenderer.render(Main.textBoxes);
-		
+
 		entities.clear();
+		animatedEntities.clear();
 		terrains.clear();
 		hitboxes.clear();
 	}
@@ -127,6 +143,18 @@ public class MasterRenderer {
 		}
 	}
 	
+	public void addAnimatedEntity(AnimatedEntity entity) {  // Adds entities to a hashmap  // Entities go to a list of their own type
+		AnimatedModel entityModel = entity.getModel();
+		List<AnimatedEntity> batch = animatedEntities.get(entityModel);  // TEMPORARY
+		if (batch != null) {
+			batch.add(entity);
+		} else {
+			List<AnimatedEntity> newBatch = new ArrayList<AnimatedEntity>();
+			newBatch.add(entity);
+			animatedEntities.put(entityModel, newBatch);
+		}
+	}
+	
 	public void addTerrain(Terrain terrain) {  // Adds terrain to list of terrains
 		terrains.add(terrain);
 	}
@@ -137,6 +165,7 @@ public class MasterRenderer {
 	
 	public void cleanUp() {
 		shader.cleanup();
+		animationShader.cleanup();
 		terrainShader.cleanup();
 		debugShader.cleanup();
 		

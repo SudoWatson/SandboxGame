@@ -25,9 +25,8 @@ public class Player extends Entity {
 	
 	
 	public Player(Vector3f position, float rotX, float rotY, float rotZ) {
-		super(new Model(OBJLoader.loadObjModel(MODEL_FILE)), position, rotX, rotY, rotZ, 1);
-		this.addHitbox("main", new Vector3f(0,0,0), new Vector3f(2,3.25f,2));
-		Main.hitboxes.add(this.getHitboxes());
+		super(MODEL_FILE, position, new Vector3f(rotX, rotY, rotZ));
+		this.addHitbox("main", new Vector3f(0,0,0), new Vector3f(1,3,1));
 		this.setCollision(true, this.getHitbox("main"));
 		this.usesGravity();
 		this.isDynamic();
@@ -39,7 +38,9 @@ public class Player extends Entity {
 	
 	public void update() {
 		super.update();
-		this.playerCamera.update();
+		if (this.playerCamera != null) {
+			this.playerCamera.update();
+		}
 	}
 	
 	protected void updateLogic() {

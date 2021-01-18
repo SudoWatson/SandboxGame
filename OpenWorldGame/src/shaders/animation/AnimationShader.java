@@ -1,5 +1,6 @@
-package shaders.statics;
+package shaders.animation;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.util.vector.Matrix4f;
@@ -10,12 +11,14 @@ import entities.entityFrameworks.Light;
 import shaders.ShaderProgram;
 import toolBox.Maths;
 
-public class StaticShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/shaders/statics/vertexShader.glsl";
-	private static final String FRAGMENT_FILE = "/shaders/statics/fragmentShader.glsl";
-	
+public class AnimationShader extends ShaderProgram{
+
+	private static final String VERTEX_FILE = "/shaders/animation/animationVertexShader.glsl";
+	private static final String FRAGMENT_FILE = "/shaders/animation/animationFragmentShader.glsl";
+
 	public static final int MAX_LIGHTS = 4;
+	public static final int MAX_JOINTS = 50;
 	
 	// Initialize all variables to be passed in to shaders
 	private int location_transformationMatrix;
@@ -30,18 +33,19 @@ public class StaticShader extends ShaderProgram {
 	private int location_lightColors[];
 	private int location_lightPositions[];
 	private int location_lightAttenuations[];
+	private int location_jointTransformations[];
 	
-	public StaticShader() {
+	public AnimationShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
 
 	@Override
 	protected void bindAttributes() {
-		// Bind all 'in' variables of vertexShader to an array in VAO
-		// Binds attributes at array [int] of object VAO to variable "variableName" in vertexShader
-		super.bindAttribute(0, "position");  // Array 0 of VAO to "position" variable  // Array holds vertex positions
-		super.bindAttribute(1, "materialColor");  // Array 1 of VAO to "materialColor" variable  // Array holds material colors
-		super.bindAttribute(2, "normal");  // Array 2 of VAO to "normal" variable  // Array holds normals
+		super.bindAttribute(0, "position");
+		super.bindAttribute(1, "materialColor");
+		super.bindAttribute(2, "normal");
+		super.bindAttribute(3, "weights");
+		super.bindAttribute(4, "jointIDs");
 	}
 
 	@Override
@@ -60,11 +64,17 @@ public class StaticShader extends ShaderProgram {
 		location_lightColors = new int[MAX_LIGHTS];
 		location_lightPositions = new int[MAX_LIGHTS];
 		location_lightAttenuations = new int[MAX_LIGHTS];
+
+		location_jointTransformations = new int[MAX_JOINTS];
 		
 		for (int i=0;i<MAX_LIGHTS;i++) {
 			location_lightColors[i] = super.getUniformLocation("lightColor[" + i + "]");
 			location_lightPositions[i] = super.getUniformLocation("lightPosition[" + i + "]");
 			location_lightAttenuations[i] = super.getUniformLocation("attenuation[" + i + "]");
+		}
+		
+		for (int i=0;i<MAX_JOINTS;i++) {
+			location_jointTransformations[i] = super.getUniformLocation("jointTransforms[" + i + "]");
 		}
 	}
 	
@@ -80,6 +90,17 @@ public class StaticShader extends ShaderProgram {
 	public void loadViewMatrix(Camera camera) {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
+	}
+	
+	public void loadJointTransforms(Matrix4f[] jointTransforms) {
+		//System.out.println(Arrays.toString(jointTransforms));
+		for (int i = 0; i < MAX_JOINTS; i++) {
+			if (i<jointTransforms.length) {
+				super.loadMatrix(location_jointTransformations[i], jointTransforms[i]);
+			} else {
+				super.loadMatrix(location_jointTransformations[i], new Matrix4f());
+			}	
+		}
 	}
 	
 	public void loadLights(List<Light> lights) {

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -12,6 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
 import debug.Debug;
 import entities.Player;
 import entities.Pumpkin;
+import entities.entityFrameworks.AnimatedEntity;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
@@ -27,8 +29,9 @@ import terrain.TerrainGenerator;
 import text.TextBox;
 
 public class Main {
-	
+
 	public static List<List<Entity>> entities;
+	public static List<List<AnimatedEntity>> animatedEntities;
 	public static List<Terrain> terrainCells;
 	public static List<List<Hitbox>> hitboxes;
 	public static List<TextBox> textBoxes;
@@ -40,14 +43,18 @@ public class Main {
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
+		/*
+		 * NOW I NEED TO DO THE ANIMATION SHADERS
+		 */
 		
 		// Initialize Objects etc
 		DisplayManager.createDisplay();
 		Random rnd = new Random();
 		
 		renderer = new MasterRenderer();
-		
+
 		entities = new ArrayList<List<Entity>>();
+		animatedEntities = new ArrayList<List<AnimatedEntity>>();
 		terrainCells = new ArrayList<Terrain>();  // List in World class
 		textBoxes = new ArrayList<TextBox>();
 		lights = new ArrayList<Light>();  // List will be in Light class
@@ -59,7 +66,7 @@ public class Main {
 		lights.add(sun);
 		
 		int terrainSize = 250;
-		Terrain terrain = TerrainGenerator.generateTerrain(-(terrainSize/2), -(terrainSize/2), terrainSize);
+		Terrain terrain = TerrainGenerator.generateFlatTerrain(-(terrainSize/2), -(terrainSize/2), terrainSize);
 		terrainCells.add(terrain);
 		
 		// Game Setup ---------------------------------------------------------------------------------------
@@ -97,7 +104,7 @@ public class Main {
 			float x = rnd.nextFloat() * terrainSize - terrainSize/2;
 			float z = rnd.nextFloat() * terrainSize - terrainSize/2;
 			Entity grass = new Entity(grassModel, new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0,1.5f);
-			trees.add(grass);
+			grasses.add(grass);
 		}
 		
 		
@@ -106,14 +113,33 @@ public class Main {
 		
 		Pumpkin pumpkin = new Pumpkin(new Vector3f(10,0,0));
 		
+		AnimatedEntity test1 = new AnimatedEntity("animatedPlayer", new Vector3f(0,terrain.getHeightOfTerrain(0, 0), 0));
+		test1.getModel().animator.playAnimation("Walking");
+		List<AnimatedEntity> animatedTests = new ArrayList<AnimatedEntity>();
+		animatedTests.add(test1);
+		animatedEntities.add(animatedTests);
 		
 		entities.add(Pumpkin.pumpkins);
 		// Game Loop
+		boolean run = false;
 		while (!Display.isCloseRequested()) {
 			// ---------------------- Logic/Update ----------------------
 			player.update();
-			
 
+
+			if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
+				test1.pauseAnimation();
+			}
+
+			if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
+				test1.resumeAnimation();
+			}
+
+			if (Keyboard.isKeyDown(Keyboard.KEY_J)) {
+				test1.stopAnimation();
+			}
+			//System.out.println(test.getSkeleton().getAnimatedTransform());
+			//test.getSkeleton().getAnimatedTransform();
 			Debug.update();
 			// ---------------------- Render ----------------------
 			for (List<Entity> entityList : entities) {
@@ -124,11 +150,23 @@ public class Main {
 				}
 			}
 			
+			for (List<AnimatedEntity> entityList : animatedEntities) {
+				for (AnimatedEntity entity : entityList) {  // Updates and renders all entities so it loops only once
+					entity.update();
+					//System.out.println(entity.getModel().getSkeleton().getAnimatedTransform());
+					renderer.addAnimatedEntity(entity);
+				}
+			}
+			
 			for (Terrain terrn : terrainCells) {
 				renderer.addTerrain(terrn);
 			}
 			
-			if (camera.getCameraStyle() != 1) renderer.addEntity(player);
+			hitboxes.remove(player.getHitboxes());
+			if (camera.getCameraStyle() != 1) {
+				renderer.addEntity(player);
+				hitboxes.add(player.getHitboxes());
+			}
 			
 			
 			

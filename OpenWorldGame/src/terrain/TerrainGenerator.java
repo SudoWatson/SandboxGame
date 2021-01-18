@@ -28,16 +28,21 @@ public class TerrainGenerator {
 
 	private static final float upperLine = 15;
 	private static final float lowerLine = 5;
+
 	
+	public static Terrain generateFlatTerrain(int x, int y, int size) {
+		float[][] heights = new float[size][size];
+		return generateTerrain(x, y, DEF_DIST, heights, generateColors(size, heights));
+	}
 	
 	public static Terrain generateTerrain(int x, int y) {
 		float[][] heights = generateHeights(DEF_SZ);
-		return generateTerrain(x, y, DEF_DIST, generateHeights(DEF_SZ), generateColors(DEF_SZ, heights));
+		return generateTerrain(x, y, DEF_DIST, heights, generateColors(DEF_SZ, heights));
 	}
 
 	public static Terrain generateTerrain(int x, int y, int size) {
 		float[][] heights = generateHeights(size);
-		return generateTerrain(x, y, DEF_DIST, generateHeights(size), generateColors(size, heights));
+		return generateTerrain(x, y, DEF_DIST, heights, generateColors(size, heights));
 	}
 	
 	public static Terrain generateTerrain(int x, int y, float edgeDist, float[][] heights, Vector3f[][] colors) {
