@@ -138,8 +138,8 @@ public class Main {
 			if (Keyboard.isKeyDown(Keyboard.KEY_J)) {
 				test1.stopAnimation();
 			}
-			//System.out.println(test.getSkeleton().getAnimatedTransform());
-			//test.getSkeleton().getAnimatedTransform();
+			
+			
 			Debug.update();
 			// ---------------------- Render ----------------------
 			for (List<Entity> entityList : entities) {
@@ -153,7 +153,6 @@ public class Main {
 			for (List<AnimatedEntity> entityList : animatedEntities) {
 				for (AnimatedEntity entity : entityList) {  // Updates and renders all entities so it loops only once
 					entity.update();
-					//System.out.println(entity.getModel().getSkeleton().getAnimatedTransform());
 					renderer.addAnimatedEntity(entity);
 				}
 			}

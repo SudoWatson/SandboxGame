@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
@@ -51,7 +50,6 @@ public class Loader {
 		storeDataInAttributeList(2, 3, normals, vboList);  // Puts normals into address 2 of VAO
 		storeDataInAttributeList(3, 3, weights, vboList);  // Puts weights into address 2 of VAO	// Weight values used for specific vertex
 		storeIntDataInAttributeList(4, 3, jointIDs, vboList);  // Puts jointIDs into address 4 of VAO  // Bone index that that weight corresponds to
-		System.out.println(Arrays.toString(jointIDs));
 		unbindVAO();
 		return new RawModel(vaoID, positions.length, vboList);
 	}

@@ -1,6 +1,5 @@
 package shaders.animation;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.util.vector.Matrix4f;
@@ -93,7 +92,6 @@ public class AnimationShader extends ShaderProgram{
 	}
 	
 	public void loadJointTransforms(Matrix4f[] jointTransforms) {
-		//System.out.println(Arrays.toString(jointTransforms));
 		for (int i = 0; i < MAX_JOINTS; i++) {
 			if (i<jointTransforms.length) {
 				super.loadMatrix(location_jointTransformations[i], jointTransforms[i]);

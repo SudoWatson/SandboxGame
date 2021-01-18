@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -190,11 +189,6 @@ public class OBJLoader {
 				materialsArray[materialPointer++] = mat.z;
 				materialsArray[materialPointer++] = mat.w;
 			}
-		}
-		
-		if (fileName == "sd") {
-			System.out.println(fileName);
-			System.out.println(Arrays.toString(verticesArray));
 		}
 		
 		modelNames.add(fileName);
