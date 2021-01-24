@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 
 import animation.Animation;
 import animation.Bone;
+import animation.Skeleton;
 import models.AnimatedModel;
 import toolBox.Convert;
 import toolBox.Maths;
@@ -48,6 +49,7 @@ public class XMLLoader {
 				document.getDocumentElement().normalize();
 				Element root = document.getDocumentElement();
 				
+				
 				// -- Geometry Data -- \\
 				Element geometry = (Element) root.getElementsByTagName("geometry").item(0);
 				Element vertexData = (Element) geometry.getElementsByTagName("vertexData").item(0);
@@ -71,6 +73,7 @@ public class XMLLoader {
 				float[] weights = new float[numOfVertices * 3];
 				int[] jointIds = new int[numOfVertices * 3];
 
+				
 				// -- Armature Data -- \\
 				Element armatureData = (Element) root.getElementsByTagName("armatureData").item(0);
 				Element armatureBones = (Element) armatureData.getElementsByTagName("stringArray").item(0);
@@ -115,14 +118,22 @@ public class XMLLoader {
 				}
 				
 
-				// -- Skeletin Data -- \\
+				// -- Skeleton Data -- \\
 				Element skeletonData = (Element) root.getElementsByTagName("skeleton").item(0);
 				
-				Element rootBone = (Element) skeletonData.getElementsByTagName("bone").item(0);
+				List<Bone> boneList = new ArrayList<Bone>();
+				NodeList bones = skeletonData.getElementsByTagName("bone");
 
-				Bone skeleton = parseBones(rootBone, boneNames);
-				skeleton.calcInverseBindTransform(new Matrix4f());
+				for (int i = 0; i < bones.getLength(); i++) {
+					Element bone = (Element) bones.item(i);
+					if (bone.getParentNode() == skeletonData) {
+						boneList.add(parseBones(bone, boneNames));
+					}
+				}
+				Skeleton skeleton = new Skeleton(boneList.toArray(new Bone[0]));
+				skeleton.calcInverseBindMatrices(new Matrix4f());
 
+				
 				// -- Animation Data -- \\
 				Element animation = (Element) ((Element) root.getElementsByTagName("animationData").item(0)).getElementsByTagName("animation").item(0);
 				

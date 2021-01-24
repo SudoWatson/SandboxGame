@@ -3,10 +3,10 @@ package models;
 
 public class Model {
 	
-	private RawModel rawModel;
+	protected RawModel rawModel;
 	
-	private float shineDamper = 1;
-	private float reflectivity = 0;
+	protected float shineDamper = 1;
+	protected float reflectivity = 0;
 	
 	private boolean useFakeLighting = false;
 	

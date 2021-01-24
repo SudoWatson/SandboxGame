@@ -8,19 +8,35 @@ import renderEngine.DisplayManager;
 import toolBox.Quaternion;
 
 public class Animator {
+
+	public static final int END = 0;
+	public static final int PAUSE = 1;
+	public static final int LOOP = 2;
+	
+	
+	private int endingType;
 	
 	private float time;
+	private float speed;
+	
 	private boolean paused = false;
+	
 	private Animation animation;
-	public final AnimatedModel model;
+	
 	private Matrix4f[] transforms;
 	
+	public final AnimatedModel model;
+	
+	
 	public Animator(AnimatedModel animModel) {
+		this.endingType = 1;
 		this.time = 0;
+		this.speed = 1;
 		this.model = animModel;
 		this.transforms = new Matrix4f[this.model.getBoneNames().length];
 		
 	}
+	
 	
 	public void update() {
 		if (this.animation == null) return;
@@ -28,14 +44,29 @@ public class Animator {
 		if (!this.paused) {
 			this.increaseTime();
 			
-			this.calculateTransforms(this.model.getSkeleton(), this.transforms);
+			for (Bone bone : this.model.getSkeleton().getRootBones()) {
+				this.calculateTransforms(bone, this.transforms);
+			}
 			this.model.getSkeleton().animateTransform(this.transforms, new Matrix4f());
 		}
+	}
+	
+	public float getTime() {
+		return this.time;
+	}
+	
+	public void setAnimatorSpeed(float speedMultiplier) {
+		this.speed = speedMultiplier;
+	}
+	
+	public void setEndingType(int endingType) {
+		this.endingType = endingType;
 	}
 	
 	public void playAnimation(String animationName) {
 		this.time = 0;
 		this.animation = Animation.getAnimation(animationName);
+		this.paused = false;
 	}
 	
 	public void resumeAnimation() {
@@ -53,9 +84,14 @@ public class Animator {
 	}
 	
 	private void increaseTime() {
-		this.time += DisplayManager.getFrameTimeSeconds();
-		if (this.time > this.animation.getTimeLength()) {
-			this.time %= this.animation.getTimeLength();
+		this.time += DisplayManager.getFrameTimeSeconds() * this.speed;
+		if (this.time >= this.animation.getTimeLength()) {
+			if (this.endingType == PAUSE) {
+				this.time = this.animation.getTimeLength() - 0.001f;
+				this.pauseAnimation();
+			} else if (this.endingType == LOOP) {
+				this.time %= this.animation.getTimeLength();
+			}
 		}
 	}
 	

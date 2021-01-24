@@ -54,9 +54,6 @@ public class AnimatedRenderer {
 		// Sets up any shaders requiring object-dependent variables
 		shader.loadFakeLighting(model.isUseFakeLighting());
 		shader.loadShineVariables(model.getShineDamper(), model.getReflectivity());
-		
-		//GL13.glActiveTexture(GL13.GL_TEXTURE0);  // Enables OpenGL Texture holder thing
-		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTexture().getTextureID());  // Binds Texture to Active Texture Slot
 	}
 	
 	private void unbindTexturedModel() {
@@ -72,7 +69,7 @@ public class AnimatedRenderer {
 	private void prepareEntity(AnimatedEntity entity) {
 		// Generates and sends transformation matrix to shaders
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation().x,
-				entity.getRotation().y, entity.getRotation().z, 1);
+				entity.getRotation().y, entity.getRotation().z, 0.25f);
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadJointTransforms(entity.getModel().getJointTransforms());
 	}

@@ -1,45 +1,41 @@
 package entities.entityFrameworks;
 
-import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import animation.Animator;
 import models.AnimatedModel;
 import renderEngine.XMLLoader;
 
-public class AnimatedEntity {
-	
-	private Vector3f position;
-	private Vector3f rotation;
+public class AnimatedEntity extends Entity {
 	
 	private AnimatedModel model;
 	
 	
 	public AnimatedEntity(String modelFileName, Vector3f position) {
+		super(XMLLoader.loadXMLObject(modelFileName), position, 0.0f, 0.0f, 0.0f, 1.0f);
 		this.model = XMLLoader.loadXMLObject(modelFileName);
-		this.position = position;
-		this.rotation = new Vector3f(0,0,0);
 	}
 	
-	public void update() {
+	public AnimatedEntity(String modelFileName, Vector3f position, Vector3f rotation) {
+		super(XMLLoader.loadXMLObject(modelFileName), position, 0.0f, 0.0f, 0.0f, 1.0f);
+		this.model = XMLLoader.loadXMLObject(modelFileName);
+	}
+
+	protected void classUpdate() {
 		this.model.animator.update();
 	}
 	
-	public Vector3f getPosition() {
-		return this.position;
+	protected Animator getAnimator() {
+		return this.model.animator;
 	}
 	
-	public Vector3f getRotation() {
-		return this.rotation;
-	}
-
 	public AnimatedModel getModel() {
-		// TODO Auto-generated method stub
 		return this.model;
 	}
 	
-	public Matrix4f getTransform() {  // WHY DOES IT ONLY WORK LIKE THIS
-		return this.model.getSkeleton().getAnimatedTransform();
-	}
+//	public Matrix4f getTransform() {  // WHY DOES IT ONLY WORK LIKE THIS
+//		return this.model.getSkeleton().getAnimatedTransform();
+//	}
 	
 	public void playAnimation(String animationName) {
 		this.model.animator.playAnimation(animationName);

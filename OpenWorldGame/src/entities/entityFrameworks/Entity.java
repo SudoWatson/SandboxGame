@@ -9,7 +9,6 @@ import engineTester.Main;
 import models.Model;
 import renderEngine.DisplayManager;
 import renderEngine.OBJLoader;
-import renderEngine.XMLLoader;
 import toolBox.Maths;
 
 public class Entity {
@@ -81,11 +80,11 @@ public class Entity {
 		this.scale = scale;
 		this.estimatedScale = new Vector3f();
 	}
-	
+
 	// Moves according to object specific method
-	protected void updateLogic() {
-		
-	}
+	protected void updateLogic() {}
+	
+	protected void classUpdate() {}
 	
 	// Stops object from colliding into other objects
 	private void rebound() {
@@ -194,6 +193,7 @@ public class Entity {
 	// Has some sort of moving method
 	
 	public void update() {
+		this.classUpdate();
 		this.updateLogic();
 		
 		if (this.gravity) {

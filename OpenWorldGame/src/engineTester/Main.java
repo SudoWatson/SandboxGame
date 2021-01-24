@@ -13,6 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
 import debug.Debug;
 import entities.Player;
 import entities.Pumpkin;
+import entities.Tree;
 import entities.entityFrameworks.AnimatedEntity;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
@@ -66,7 +67,7 @@ public class Main {
 		lights.add(sun);
 		
 		int terrainSize = 250;
-		Terrain terrain = TerrainGenerator.generateFlatTerrain(-(terrainSize/2), -(terrainSize/2), terrainSize);
+		Terrain terrain = TerrainGenerator.generateTerrain(-(terrainSize/2), -(terrainSize/2), terrainSize);
 		terrainCells.add(terrain);
 		
 		// Game Setup ---------------------------------------------------------------------------------------
@@ -113,11 +114,11 @@ public class Main {
 		
 		Pumpkin pumpkin = new Pumpkin(new Vector3f(10,0,0));
 		
-		AnimatedEntity test1 = new AnimatedEntity("animatedPlayer", new Vector3f(0,terrain.getHeightOfTerrain(0, 0), 0));
-		test1.getModel().animator.playAnimation("Walking");
+		Tree tree = new Tree(new Vector3f(), 0, 0, 0);
 		List<AnimatedEntity> animatedTests = new ArrayList<AnimatedEntity>();
-		animatedTests.add(test1);
+		animatedTests.add(tree);
 		animatedEntities.add(animatedTests);
+		hitboxes.add(tree.getHitboxes());
 		
 		entities.add(Pumpkin.pumpkins);
 		// Game Loop
@@ -125,20 +126,11 @@ public class Main {
 		while (!Display.isCloseRequested()) {
 			// ---------------------- Logic/Update ----------------------
 			player.update();
-
+			
 
 			if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
-				test1.pauseAnimation();
+				tree.pauseAnimation();
 			}
-
-			if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
-				test1.resumeAnimation();
-			}
-
-			if (Keyboard.isKeyDown(Keyboard.KEY_J)) {
-				test1.stopAnimation();
-			}
-			
 			
 			Debug.update();
 			// ---------------------- Render ----------------------
@@ -154,6 +146,7 @@ public class Main {
 				for (AnimatedEntity entity : entityList) {  // Updates and renders all entities so it loops only once
 					entity.update();
 					renderer.addAnimatedEntity(entity);
+					camera.getRay().castTo(entity);
 				}
 			}
 			
@@ -163,7 +156,7 @@ public class Main {
 			
 			hitboxes.remove(player.getHitboxes());
 			if (camera.getCameraStyle() != 1) {
-				renderer.addEntity(player);
+				renderer.addAnimatedEntity(player);
 				hitboxes.add(player.getHitboxes());
 			}
 			

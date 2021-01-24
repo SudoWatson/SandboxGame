@@ -6,32 +6,29 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import animation.Animator;
 import animation.Bone;
+import animation.Skeleton;
 
-public class AnimatedModel {
+public class AnimatedModel extends Model {
 	
-	private RawModel rawModel;
 	private String[] boneNames;
-	private Bone skeleton;
+	private Skeleton skeleton;
 	public Animator animator;
-	
-	private float shineDamper = 1;
-	private float reflectivity = 0;
 	
 	private boolean useFakeLighting = false;
 	
-	public AnimatedModel(RawModel rawModel, String[] boneNames, Bone rootBone) {
-		this.rawModel = rawModel;
+	public AnimatedModel(RawModel rawModel, String[] boneNames, Skeleton skeleton) {
+		super(rawModel);
 		this.boneNames = boneNames;
-		this.skeleton = rootBone;
+		this.skeleton = skeleton;
 		this.animator = new Animator(this);
 	}
 
 	public RawModel getRawModel() {
-		return rawModel;
+		return this.rawModel;
 	}
 	
 	public boolean isUseFakeLighting() {
-		return useFakeLighting;
+		return this.useFakeLighting;
 	}
 
 	public void setUseFakeLighting(boolean useFakeLighting) {
@@ -39,7 +36,7 @@ public class AnimatedModel {
 	}
 
 	public float getShineDamper() {
-		return shineDamper;
+		return this.shineDamper;
 	}
 
 	public void setShineDamper(float shineDamper) {
@@ -47,7 +44,7 @@ public class AnimatedModel {
 	}
 
 	public float getReflectivity() {
-		return reflectivity;
+		return this.reflectivity;
 	}
 
 	public void setReflectivity(float reflectivity) {
@@ -58,7 +55,7 @@ public class AnimatedModel {
 		return this.boneNames;
 	}
 	
-	public Bone getSkeleton() {
+	public Skeleton getSkeleton() {
 		return this.skeleton;
 	}
 	
@@ -66,7 +63,9 @@ public class AnimatedModel {
 		int boneNum = this.boneNames.length;
 		Matrix4f[] out = new Matrix4f[boneNum];
 		
-		getJointTransform(out, this.getSkeleton());
+		for (Bone bone : this.skeleton.getRootBones()) {
+			getJointTransform(out, bone);
+		}
 		return out;
 	}
 	
