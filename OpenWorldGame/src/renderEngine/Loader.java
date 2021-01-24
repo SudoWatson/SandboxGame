@@ -38,6 +38,22 @@ public class Loader {
 		return new RawModel(vaoID, positions.length, vboList);
 	}
 	
+	// Animation Loader
+	public static RawModel loadToVAOAnimated(float[] positions, float[] normals, float[] materialColors, float[] weights, int[] jointIDs) {
+		int vaoID = createVAO();  // Creates Vertex Array Object (VAO) for model
+		List<Integer> vboList = new ArrayList<Integer>();
+		
+		// Anything being used by a shader must be put into an array of the models VAO
+//		storeDataInAttributeList(VAO Address, Data Dimensions, Variable Parameter, List of VBOs so the object can easily remove itself);
+		storeDataInAttributeList(0, 3, positions, vboList);  // Puts vertex positions into address 0 of VAO
+		storeDataInAttributeList(1, 4, materialColors, vboList);  // Puts material colors into address 1 of VAO
+		storeDataInAttributeList(2, 3, normals, vboList);  // Puts normals into address 2 of VAO
+		storeDataInAttributeList(3, 3, weights, vboList);  // Puts weights into address 2 of VAO	// Weight values used for specific vertex
+		storeIntDataInAttributeList(4, 3, jointIDs, vboList);  // Puts jointIDs into address 4 of VAO  // Bone index that that weight corresponds to
+		unbindVAO();
+		return new RawModel(vaoID, positions.length, vboList);
+	}
+	
 	// Terrain Loader
 	public static RawModel loadToVAO(float[] positions, float[] normals, float[] materialColors, int[] indices) {
 		int vaoID = createVAO();  // Creates VAO for terrain
@@ -154,7 +170,25 @@ public class Loader {
 		/*							  Array			  Dimensions		Data	  Normal- Extra	 Offset of
 		 *							index of VAO	   Of Data:			Type       ized   Data	 Starting
 		 * 											  							   		 Between	Pos
-		 * 											  3D (X,Y,Z)		   				 Vertexes
+		 *																  				 Vertexes
+		*/
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);  // Unbind VBO  // 0 means unbind current VBO/VAO
+	}
+	
+	private static void storeIntDataInAttributeList(int attributeNumber, int coordinateSize, int[] data, List<Integer> vboDestination) {
+		int vboID = GL15.glGenBuffers();  // Creates a Vertex Buffer Array (VBO)
+		vbos.add(vboID);  // Adds to list of VBOs for easy removal
+		if (vboDestination != null) {
+			vboDestination.add(vboID);
+		}
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);  // Binds buffer so methods refer to this VBO
+		IntBuffer buffer = storeDataInIntBuffer(data);  // Creates buffer
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);  // Puts buffer as VBO  // GL_STATIC_DRAW-buffer data won't change
+		
+		GL30.glVertexAttribIPointer(attributeNumber, coordinateSize, GL11.GL_INT, 0, 0);
+		/*							  Array			  Dimensions		Data  Stride Offset of
+		 *							index of VAO	   Of Data:			Type         Starting
+		 * 											  							   	    Pos
 		*/
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);  // Unbind VBO  // 0 means unbind current VBO/VAO
 	}

@@ -51,7 +51,7 @@ public class Maths {
 		Matrix4f.rotate((float) Math.toRadians(rotation.x), new Vector3f(1,0,0), transMatrix, transMatrix);
 		Matrix4f.rotate((float) Math.toRadians(rotation.y), new Vector3f(0,1,0), transMatrix, transMatrix);
 		Matrix4f.rotate((float) Math.toRadians(rotation.z), new Vector3f(0,0,1), transMatrix, transMatrix);
-		Matrix4f.scale(new Vector3f(scale.x,0,0), transMatrix, transMatrix);
+		Matrix4f.scale(new Vector3f(0,0,scale.z), transMatrix, transMatrix);
 		return transMatrix;
 	}
 	

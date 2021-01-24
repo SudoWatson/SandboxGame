@@ -19,7 +19,7 @@ public class Pumpkin extends Entity {
 	public Pumpkin(Vector3f pos, Vector3f rot) {
 		super("pumpkinLow", new Vector3f(pos), new Vector3f(rot));
 		this.usesGravity();
-		this.addHitbox("main", new Vector3f(), new Vector3f(2,2,2));
+		this.addHitbox("main", new Vector3f(), new Vector3f(1.5f,1.5f,1.5f));
 		this.setCollision(true, "main");
 		this.isDynamic();
 		Main.hitboxes.add(this.getHitboxes());

@@ -45,7 +45,7 @@ public class DebugRenderer {
 		float[] cubePositions = {1, -1, -1, 1, -1, 1, -1, -1, 1, -1, -1, -1, 1, 1, -1, 1, 1, 1, -1, 1, 1, -1, 1, -1};
 		int[] hitboxIndices = {0,1,1,2,2,3,3,0,4,5,5,6,6,7,7,4,0,4,1,5,2,6,3,7};
 		int[] pointIndices = {0,1,2,0,2,3,4,6,5,4,7,6,0,4,5,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0}; //3740
-		float[] lookingPositions = {0,0,0,1.25f,0,0};
+		float[] lookingPositions = {0,0,0,0,0,1.25f};
 		int[] lookingIndices = {0,1};
 		float[] linePositions = {0,-1,0,0,1,0};
 		int[] lineIndices = {0,1};

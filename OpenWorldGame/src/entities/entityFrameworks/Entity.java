@@ -52,6 +52,11 @@ public class Entity {
 		this.modelName = model;
 	}
 	
+//	public Entity(String model, Vector3f position, Vector3f rotation, boolean XML) {
+//		this(new Model(XMLLoader.loadXMLObject(model)), position, rotation.x, rotation.y, rotation.z, 1);
+//		this.modelName = model;
+//	}
+	
 	// Takes Filename For Mesh and Materials File - No Texture Image
 	public Entity(String model, Vector3f position, Vector3f rotation, float scale) {
 		this(new Model(OBJLoader.loadObjModel(model)), position, rotation.x, rotation.y, rotation.z, scale);
@@ -75,11 +80,11 @@ public class Entity {
 		this.scale = scale;
 		this.estimatedScale = new Vector3f();
 	}
-	
+
 	// Moves according to object specific method
-	protected void updateLogic() {
-		
-	}
+	protected void updateLogic() {}
+	
+	protected void classUpdate() {}
 	
 	// Stops object from colliding into other objects
 	private void rebound() {
@@ -188,6 +193,7 @@ public class Entity {
 	// Has some sort of moving method
 	
 	public void update() {
+		this.classUpdate();
 		this.updateLogic();
 		
 		if (this.gravity) {

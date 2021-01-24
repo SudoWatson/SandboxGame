@@ -12,6 +12,8 @@ import org.lwjgl.util.vector.Vector3f;
 import debug.Debug;
 import entities.Player;
 import entities.Pumpkin;
+import entities.Tree;
+import entities.entityFrameworks.AnimatedEntity;
 import entities.entityFrameworks.Camera;
 import entities.entityFrameworks.Entity;
 import entities.entityFrameworks.Hitbox;
@@ -27,8 +29,9 @@ import terrain.TerrainGenerator;
 import text.TextBox;
 
 public class Main {
-	
+
 	public static List<List<Entity>> entities;
+	public static List<List<AnimatedEntity>> animatedEntities;
 	public static List<Terrain> terrainCells;
 	public static List<List<Hitbox>> hitboxes;
 	public static List<TextBox> textBoxes;
@@ -40,14 +43,18 @@ public class Main {
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
+		/*
+		 * NOW I NEED TO DO THE ANIMATION SHADERS
+		 */
 		
 		// Initialize Objects etc
 		DisplayManager.createDisplay();
 		Random rnd = new Random();
 		
 		renderer = new MasterRenderer();
-		
+
 		entities = new ArrayList<List<Entity>>();
+		animatedEntities = new ArrayList<List<AnimatedEntity>>();
 		terrainCells = new ArrayList<Terrain>();  // List in World class
 		textBoxes = new ArrayList<TextBox>();
 		lights = new ArrayList<Light>();  // List will be in Light class
@@ -75,19 +82,15 @@ public class Main {
 		hitboxes.add(pineTree.getHitboxes());
 		entities.add(new ArrayList<Entity>(Arrays.asList(pineTree)));
 
-		List<Entity> trees = new ArrayList<Entity>();
-		entities.add(trees);
+		List<AnimatedEntity> animatedTrees = new ArrayList<AnimatedEntity>();
+		animatedEntities.add(animatedTrees);
 		Model treeModel = new Model(OBJLoader.loadObjModel("loliPopTree"));
 		for (int i = 0; i < 100; i ++) {
 			float x = rnd.nextFloat() * terrainSize - terrainSize/2;
 			float z = rnd.nextFloat() * terrainSize - terrainSize/2;
-			Entity tree = new Entity(treeModel, new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0,1);
-			tree.addHitbox("main", new Vector3f(0,0,0), new Vector3f(1,3,1));
-			tree.addHitbox("leaves", new Vector3f(0,3,0), new Vector3f(2.5f,1,2.5f));
+			Tree tree = new Tree(new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0);
 			hitboxes.add(tree.getHitboxes());
-			tree.setCollision(true, "main");
-			tree.setCollision(true, "leaves");
-			trees.add(tree);
+			animatedTrees.add(tree);
 		}
 
 		List<Entity> grasses = new ArrayList<Entity>();
@@ -97,7 +100,7 @@ public class Main {
 			float x = rnd.nextFloat() * terrainSize - terrainSize/2;
 			float z = rnd.nextFloat() * terrainSize - terrainSize/2;
 			Entity grass = new Entity(grassModel, new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0,1.5f);
-			trees.add(grass);
+			grasses.add(grass);
 		}
 		
 		
@@ -109,11 +112,12 @@ public class Main {
 		
 		entities.add(Pumpkin.pumpkins);
 		// Game Loop
+		boolean run = false;
 		while (!Display.isCloseRequested()) {
 			// ---------------------- Logic/Update ----------------------
 			player.update();
 			
-
+			
 			Debug.update();
 			// ---------------------- Render ----------------------
 			for (List<Entity> entityList : entities) {
@@ -124,11 +128,23 @@ public class Main {
 				}
 			}
 			
+			for (List<AnimatedEntity> entityList : animatedEntities) {
+				for (AnimatedEntity entity : entityList) {  // Updates and renders all entities so it loops only once
+					entity.update();
+					renderer.addAnimatedEntity(entity);
+					camera.getRay().castTo(entity);
+				}
+			}
+			
 			for (Terrain terrn : terrainCells) {
 				renderer.addTerrain(terrn);
 			}
 			
-			if (camera.getCameraStyle() != 1) renderer.addEntity(player);
+			hitboxes.remove(player.getHitboxes());
+			if (camera.getCameraStyle() != 1) {
+				renderer.addAnimatedEntity(player);
+				hitboxes.add(player.getHitboxes());
+			}
 			
 			
 			

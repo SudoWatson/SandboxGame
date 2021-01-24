@@ -4,14 +4,12 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
-import engineTester.Main;
+import animation.Animator;
+import entities.entityFrameworks.AnimatedEntity;
 import entities.entityFrameworks.Camera;
-import entities.entityFrameworks.Entity;
-import models.Model;
 import renderEngine.DisplayManager;
-import renderEngine.OBJLoader;
 
-public class Player extends Entity {
+public class Player extends AnimatedEntity {
 
 	private static final String MODEL_FILE = "player";
 	private static final float RUN_SPEED = 12f;
@@ -25,12 +23,13 @@ public class Player extends Entity {
 	
 	
 	public Player(Vector3f position, float rotX, float rotY, float rotZ) {
-		super(new Model(OBJLoader.loadObjModel(MODEL_FILE)), position, rotX, rotY, rotZ, 1);
-		this.addHitbox("main", new Vector3f(0,0,0), new Vector3f(2,3.25f,2));
-		Main.hitboxes.add(this.getHitboxes());
+		super(MODEL_FILE, position, new Vector3f(rotX, rotY, rotZ), 0.25f);
+		this.addHitbox("main", new Vector3f(0,0,0), new Vector3f(1,3,1));
 		this.setCollision(true, this.getHitbox("main"));
 		this.usesGravity();
 		this.isDynamic();
+		this.getAnimator().setAnimatorSpeed(2.75f);
+		this.getAnimator().setEndingType(Animator.LOOP);
 	}
 	
 	public void setCamera(Camera camera) {
@@ -39,16 +38,32 @@ public class Player extends Entity {
 	
 	public void update() {
 		super.update();
-		this.playerCamera.update();
+		if (this.playerCamera != null) {
+			this.playerCamera.update();
+		}
 	}
 	
 	protected void updateLogic() {
+		Boolean moving = true;
+		Boolean beganMoving = false;
+		// if 'w' or 's' is pressed
+		if (this.dx == 0.0f & this.dz == 0.0f) {
+			moving = false;
+		}
 		this.move();
+		if (!(this.dx == 0.0f & this.dz == 0.0f) & !moving) {
+			beganMoving = true;
+		}
+		if (beganMoving) {
+			this.playAnimation("Walking");
+		}
+		if (this.dx == 0.0f & this.dz == 0.0f) {
+			this.stopAnimation();
+		}
 	}
 	
 	private void move() {
 		// Moving method
-
 		checkInputs();
 		//super.rotate(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float angleChange = Mouse.getDX() * 0.3f;
