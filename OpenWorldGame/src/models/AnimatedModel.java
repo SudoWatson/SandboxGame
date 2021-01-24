@@ -14,41 +14,11 @@ public class AnimatedModel extends Model {
 	private Skeleton skeleton;
 	public Animator animator;
 	
-	private boolean useFakeLighting = false;
-	
 	public AnimatedModel(RawModel rawModel, String[] boneNames, Skeleton skeleton) {
 		super(rawModel);
 		this.boneNames = boneNames;
 		this.skeleton = skeleton;
 		this.animator = new Animator(this);
-	}
-
-	public RawModel getRawModel() {
-		return this.rawModel;
-	}
-	
-	public boolean isUseFakeLighting() {
-		return this.useFakeLighting;
-	}
-
-	public void setUseFakeLighting(boolean useFakeLighting) {
-		this.useFakeLighting = useFakeLighting;
-	}
-
-	public float getShineDamper() {
-		return this.shineDamper;
-	}
-
-	public void setShineDamper(float shineDamper) {
-		this.shineDamper = shineDamper;
-	}
-
-	public float getReflectivity() {
-		return this.reflectivity;
-	}
-
-	public void setReflectivity(float reflectivity) {
-		this.reflectivity = reflectivity;
 	}
 	
 	public String[] getBoneNames() {

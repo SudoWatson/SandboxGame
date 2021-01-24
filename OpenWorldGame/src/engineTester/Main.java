@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -83,19 +82,15 @@ public class Main {
 		hitboxes.add(pineTree.getHitboxes());
 		entities.add(new ArrayList<Entity>(Arrays.asList(pineTree)));
 
-		List<Entity> trees = new ArrayList<Entity>();
-		entities.add(trees);
+		List<AnimatedEntity> animatedTrees = new ArrayList<AnimatedEntity>();
+		animatedEntities.add(animatedTrees);
 		Model treeModel = new Model(OBJLoader.loadObjModel("loliPopTree"));
 		for (int i = 0; i < 100; i ++) {
 			float x = rnd.nextFloat() * terrainSize - terrainSize/2;
 			float z = rnd.nextFloat() * terrainSize - terrainSize/2;
-			Entity tree = new Entity(treeModel, new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0,1);
-			tree.addHitbox("main", new Vector3f(0,0,0), new Vector3f(1,3,1));
-			tree.addHitbox("leaves", new Vector3f(0,3,0), new Vector3f(2.5f,1,2.5f));
+			Tree tree = new Tree(new Vector3f(x,terrain.getHeightOfTerrain(x, z), z),0,(int) (rnd.nextFloat()*360),0);
 			hitboxes.add(tree.getHitboxes());
-			tree.setCollision(true, "main");
-			tree.setCollision(true, "leaves");
-			trees.add(tree);
+			animatedTrees.add(tree);
 		}
 
 		List<Entity> grasses = new ArrayList<Entity>();
@@ -114,11 +109,6 @@ public class Main {
 		
 		Pumpkin pumpkin = new Pumpkin(new Vector3f(10,0,0));
 		
-		Tree tree = new Tree(new Vector3f(), 0, 0, 0);
-		List<AnimatedEntity> animatedTests = new ArrayList<AnimatedEntity>();
-		animatedTests.add(tree);
-		animatedEntities.add(animatedTests);
-		hitboxes.add(tree.getHitboxes());
 		
 		entities.add(Pumpkin.pumpkins);
 		// Game Loop
@@ -127,10 +117,6 @@ public class Main {
 			// ---------------------- Logic/Update ----------------------
 			player.update();
 			
-
-			if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
-				tree.pauseAnimation();
-			}
 			
 			Debug.update();
 			// ---------------------- Render ----------------------

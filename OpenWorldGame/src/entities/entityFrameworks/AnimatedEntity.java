@@ -11,13 +11,13 @@ public class AnimatedEntity extends Entity {
 	private AnimatedModel model;
 	
 	
-	public AnimatedEntity(String modelFileName, Vector3f position) {
-		super(XMLLoader.loadXMLObject(modelFileName), position, 0.0f, 0.0f, 0.0f, 1.0f);
+	public AnimatedEntity(String modelFileName, Vector3f position, float scale) {
+		super(XMLLoader.loadXMLObject(modelFileName), position, 0, 0, 0, scale);
 		this.model = XMLLoader.loadXMLObject(modelFileName);
 	}
 	
-	public AnimatedEntity(String modelFileName, Vector3f position, Vector3f rotation) {
-		super(XMLLoader.loadXMLObject(modelFileName), position, 0.0f, 0.0f, 0.0f, 1.0f);
+	public AnimatedEntity(String modelFileName, Vector3f position, Vector3f rotation, float scale) {
+		super(XMLLoader.loadXMLObject(modelFileName), position, rotation.x, rotation.y, rotation.z, scale);
 		this.model = XMLLoader.loadXMLObject(modelFileName);
 	}
 
@@ -32,10 +32,6 @@ public class AnimatedEntity extends Entity {
 	public AnimatedModel getModel() {
 		return this.model;
 	}
-	
-//	public Matrix4f getTransform() {  // WHY DOES IT ONLY WORK LIKE THIS
-//		return this.model.getSkeleton().getAnimatedTransform();
-//	}
 	
 	public void playAnimation(String animationName) {
 		this.model.animator.playAnimation(animationName);

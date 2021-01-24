@@ -69,7 +69,7 @@ public class AnimatedRenderer {
 	private void prepareEntity(AnimatedEntity entity) {
 		// Generates and sends transformation matrix to shaders
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation().x,
-				entity.getRotation().y, entity.getRotation().z, 0.25f);
+				entity.getRotation().y, entity.getRotation().z, entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadJointTransforms(entity.getModel().getJointTransforms());
 	}

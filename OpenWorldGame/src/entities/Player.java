@@ -23,7 +23,7 @@ public class Player extends AnimatedEntity {
 	
 	
 	public Player(Vector3f position, float rotX, float rotY, float rotZ) {
-		super(MODEL_FILE, position, new Vector3f(rotX, rotY, rotZ));
+		super(MODEL_FILE, position, new Vector3f(rotX, rotY, rotZ), 0.25f);
 		this.addHitbox("main", new Vector3f(0,0,0), new Vector3f(1,3,1));
 		this.setCollision(true, this.getHitbox("main"));
 		this.usesGravity();
