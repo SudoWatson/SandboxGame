@@ -1,10 +1,20 @@
 # SandboxGame
 Just a sandbox game for me to implement and learn how game design works with Java and LWJGL(OpenGL)
 
-Week10: Animation Implementation cont:
-- Removed test code which caused errors in transformation calculations
-- Fully implemented basic animation rendering succesfully
-- Implemented a Pause, Resume, Play, and Stop animation funtionality
+Week10: Animations Complete
+
+- Finished implementation of basic animation system
+- Animations are properly transformed
+- Bug with the size of an XML model; Can be hack-fixed by hard-scaling model in-engine
+- Ability to pause, resume, fully stop, or begin playing an animation
+- Able to change the speed the animation runs at
+- Animation ending options: Loop, pause
+- 'AnimatedModel' now extends 'Model' without repetition
+- Issue: XMLObjects are loaded twice; Potential fix, load a false model into the parent 'Entity' constructor and true model into the 'AnimatedEntity' constructor (or vise versa)
+- Fixed Player walking animation
+- Added Tree falling animation
+- Trees fall over when clicked on
+
 
 Week9: Animation Implementation:
 - Began implement animations into game engine
