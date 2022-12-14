@@ -1,0 +1,4 @@
+- Implemented sub-debug mode system
+- Added sub-debug modes; Hitbox, Coords, Debug Lines
+- Added Debug Lines
+- Extended Coord debug view

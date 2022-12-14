@@ -1,0 +1,3 @@
+Cleaned up value noise algorithm and added setters for the parameters
+Fixed bug that colored 2 triangles with the same color when they should be different
+Varied the color of the terrain and added height-dependant(kinda) colors.

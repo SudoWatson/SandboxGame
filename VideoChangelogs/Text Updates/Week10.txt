@@ -1,0 +1,14 @@
+Week10: Animations Complete
+
+- Finished implementation of basic animation system
+- Animations are properly transformed
+- Bug with the size of an XML model; Can be hack-fixed by hard-scaling model in-engine
+- Ability to pause, resume, fully stop, or begin playing an animation
+- Able to change the speed the animation runs at
+- Animation ending options: Loop, pause
+- 'AnimatedModel' now extends 'Model' without repetition
+- Issue: XMLObjects are loaded twice; Potential fix, load a false model into the parent 'Entity' constructor and true model into the 'AnimatedEntity' constructor (or vise versa)
+
+- Fixed Player walking animation
+- Added Tree falling animation
+- Trees fall over when clicked on

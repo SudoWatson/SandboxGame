@@ -1,6 +1,55 @@
-# SandboxGame
-Just a sandbox game for me to implement and learn how game design works with Java and LWJGL(OpenGL)
+# Sandbox "Game"
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Built With](#built-with)
+- [Features](#features)
+- [Acknowledgements](#acknowledgements)
+- [Changelog](#changelog)
+
+## Overview
+
+This project was developed during my high school software development independant study over the course of about 10 weeks. It's a more than basic sandbox "game"
+for me to implement and learn how game dseign works with Java and the Light Weight Java Game Library (LWJGL). It is much less a game, and more a collection of a few game design concepts
+and 3D graphics implementation.
+
+This is the final update video I made for the class. While it doesn't go over and cover everything, most everything is at least on display in the video. You can view the entire
+plan and changelog [below](#changelog) and watch all of the [video changelogs](./VideoChangelogs/) if you want to.
+<video width="320" height="240" controls>
+  <source src="./VideoChangelogs/Week10.mp4" type="video/mp4">
+  Video can't load
+</video>
+
+## Built With
+
+JAVA using LWJGL for graphics.
+Eclipse IDE
+Blender to design models and animations
+XML to store model animation data
+
+## Skills
+Java, OOP, XML, 3D graphics, shaders, 3D animation, Blender, Python
+
+## Features
+
+- 3D graphics using shaders and renderers
+- 3D model importing
+- 3D animations
+- Up to 3 dynamic light sources
+- Basic box collision detection
+- Simplified and basic physics
+- File converter to convert from blender files to custom XML object format
+- View [video changelogs](./VideoChangelogs)
+
+
+## Acknowledgements
+
+[ThinMatrix](https://www.youtube.com/@ThinMatrix) on YouTube has a playlist teaching LWJGL and was an amazing learning resource.
+
+
+
+## Changelog
 Week10: Animations Complete
 
 - Finished implementation of basic animation system

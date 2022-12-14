@@ -1,0 +1,14 @@
+- Added and implemented GUI renderer
+- Added and implemented GUI shaders
+- Added GUI objects
+- Added crosshair
+- Added text boxes
+- Added font loading
+- Added and implemented text renderer
+- Added and implemented text shaders
+- Text of a textbox is now changable
+- Text works at different font sizes
+- Added a debug controls view
+- Added an FPS counter
+- Added a debug manager class to handle all debug modes
+- Changed loader to be static and more flexible
