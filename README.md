@@ -16,10 +16,9 @@ and 3D graphics implementation.
 
 This is the final update video I made for the class. While it doesn't go over and cover everything, most everything is at least on display in the video. You can view the entire
 plan and changelog [below](#changelog) and watch all of the [video changelogs](./VideoChangelogs/) if you want to.
-<video width="320" height="240" controls>
-  <source src="./VideoChangelogs/Week10.mp4" type="video/mp4">
-  Video can't load
-</video>
+
+https://user-images.githubusercontent.com/65475597/207750643-c3e15da5-7045-4c33-8cfb-7bfbeda1e21e.mp4
+
 
 ## Built With
 
