@@ -10,8 +10,8 @@
 
 ## Overview
 
-This project was developed during my high school software development independant study over the course of about 10 weeks. It's a more than basic sandbox "game"
-for me to implement and learn how game dseign works with Java and the Light Weight Java Game Library (LWJGL). It is much less a game, and more a collection of a few game design concepts
+This project was developed during my high school software development independent study over the course of about 10 weeks. It's a more than basic sandbox "game"
+for me to implement and learn how game design works with Java and the Light Weight Java Game Library (LWJGL). It is much less a game, and more a collection of a few game design concepts
 and 3D graphics implementation.
 
 This is the final update video I made for the class. While it doesn't go over and cover everything, most everything is at least on display in the video. You can view the entire
@@ -22,7 +22,7 @@ https://user-images.githubusercontent.com/65475597/207750643-c3e15da5-7045-4c33-
 
 ## Built With
 
-JAVA using LWJGL for graphics.
+JAVA with LWJGL for graphics.
 Eclipse IDE
 Blender to design models and animations
 XML to store model animation data
@@ -51,31 +51,31 @@ Java, OOP, XML, 3D graphics, shaders, 3D animation, Blender, Python
 ## Changelog
 Week10: Animations Complete
 
-- Finished implementation of basic animation system
+- Finished implementation of a basic animation system
 - Animations are properly transformed
 - Bug with the size of an XML model; Can be hack-fixed by hard-scaling model in-engine
-- Ability to pause, resume, fully stop, or begin playing an animation
+- Ability to pause, resume, end, or begin playing an animation
 - Able to change the speed the animation runs at
 - Animation ending options: Loop, pause
 - 'AnimatedModel' now extends 'Model' without repetition
-- Issue: XMLObjects are loaded twice; Potential fix, load a false model into the parent 'Entity' constructor and true model into the 'AnimatedEntity' constructor (or vise versa)
+- Issue: XMLObjects are loaded twice; Potential fix, load a false model into the parent 'Entity' constructor and the true model into the 'AnimatedEntity' constructor (or vise versa)
 - Fixed Player walking animation
 - Added Tree falling animation
 - Trees fall over when clicked on
 
 
 Week9: Animation Implementation:
-- Began implement animations into game engine
+- Began implementing animations into the game engine
 - Added an Animated Entity with basic data (Lacks full extendability of regular entity for now)
 - Added a hierarchal bone class
 - Added an animation class to store animation data on game load
-- Added an animator to control an objects animations
+- Added an animator to control an object's animations
 - Added animation renderer
 - Added animation shaders
-- Managed to get close workings of animation renderer after first couple tries
+- Managed to get close workings of animation renderer after first the couple tries
 
 Week8: Animation Exporting cont:
-- Extended converter program to convert skinning and animatin data to custom format
+- Extended converter program to convert skinning and animation data to custom format
 - Experimented with programming an exporter add-on (DELAYED)
 
 Week7: Animation Exporting:
@@ -90,13 +90,13 @@ Week6: Animations
 
 Week5: Interact via Ray-Cast
 - Added debug points
-- Added a ray-cast from the screen crosshair
+- Added a ray cast from the screen crosshair
 - Detected objects along the ray
 - Called method on intersecting objects once for every click
 - Initiated only the nearest object's method along the ray
 - Added a method for entities when they are clicked on
 - Added a method for entities when the cursor hovers over them
-- Put pumpkin into its own class, can now be called with 1 line of code instead of 7
+- Put pumpkin into its own class; can now be called with 1 line of code instead of 7
 
 Week4: GUI/Text
 - Added and implemented GUI renderer
@@ -106,7 +106,7 @@ Week4: GUI/Text
 - Added text boxes
 - Added font loading
 - Added text rendering
-- Text of a textbox is now changable
+- Text of a textbox is now dynamic
 - Text works at different font sizes
 - Added a view
 - Added an FPS counter
@@ -120,7 +120,7 @@ Week3: Debug
 - Extended Coord debug view
 
 Week2: Entity Components
-- Implemented component based entity system
+- Implemented component-based entity system
 - Added gravity component
 - Added dynamic component
 - Implemented project with this GitHub
